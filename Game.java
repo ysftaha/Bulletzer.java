@@ -13,7 +13,7 @@ import javax.swing.Timer;
 
 public class Game extends JFrame implements ActionListener, KeyListener
 {
-	Timer tmr; // Swing.Timer
+	Timer tmr; // swing timer
 	GamePanel game; // a gamepanel that controls the player component
 
 	/**

@@ -21,8 +21,8 @@ public class GamePanel extends JPanel
 	{
 		keys = new boolean[KeyEvent.KEY_LAST+1];
 		backGround = new ImageIcon("OuterSpace.jpg").getImage();
-	    playerX = 170;
-        playerY = 170;
+	    playerX = 280;
+        playerY = 735;
 		setSize(600,800);
 	}
 
@@ -49,7 +49,8 @@ public class GamePanel extends JPanel
 
     public void paintComponent(Graphics g)
 	{
-    	g.drawImage(backGround,0,0,this);
+		g.setColor(Color.black);
+		g.fillRect(0,0,600,800);
 		g.setColor(Color.blue);
 		g.fillRect(playerX,playerY,40,40);
     }
