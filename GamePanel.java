@@ -15,18 +15,21 @@ public class GamePanel extends JPanel
 {
 	private int playerX,playerY;
 	private boolean[] keys; // boolean array of the keys
-	private Image backGround;
-	private Player playerObj;
+	private Image playerImg;
+	private Image playerBulletImg;
+	private Image enemyBulletImg;
 
 	public GamePanel()
 	{
 		keys = new boolean[KeyEvent.KEY_LAST+1];
-		backGround = new ImageIcon("OuterSpace.jpg").getImage();
+		// backGround = new ImageIcon("OuterSpace.jpg").getImage();
+		playerImg = new ImageIcon("playerShip.png").getImage();
+		playerBulletImg = new ImageIcon("playerBullet.png").getImage();
+		enemyBulletImg = new ImageIcon("enemyBullet.png").getImage();
+
 	    playerX = 280;
         playerY = 735;
 		setSize(600,800);
-
-		playerObj = new Player(50, 680, this);
 	}
 
     public void setKey(int k, boolean v) {keys[k] = v;}
@@ -57,8 +60,12 @@ public class GamePanel extends JPanel
 		g.fillRect(0,0,600,800);
 
 		// playerShip
-		g.setColor(Color.blue);
+		g.setColor(Color.black);
 		g.fillRect(playerX,playerY,40,40);
+		// playerImg.paintIcon(this, g, playerX,playerY);
+		g.drawImage(playerImg, playerX, playerY, this);
+		g.drawImage(playerBulletImg, 90, 90, this);
+		g.drawImage(enemyBulletImg, 200, 90, this);
 
     }
 }
