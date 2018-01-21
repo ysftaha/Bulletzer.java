@@ -16,6 +16,7 @@ public class GamePanel extends JPanel
 	private int playerX,playerY;
 	private boolean[] keys; // boolean array of the keys
 	private Image backGround;
+	private Player playerObj;
 
 	public GamePanel()
 	{
@@ -24,6 +25,8 @@ public class GamePanel extends JPanel
 	    playerX = 280;
         playerY = 735;
 		setSize(600,800);
+
+		playerObj = new Player(50, 680, this);
 	}
 
     public void setKey(int k, boolean v) {keys[k] = v;}
@@ -49,9 +52,13 @@ public class GamePanel extends JPanel
 
     public void paintComponent(Graphics g)
 	{
+		// backGround
 		g.setColor(Color.black);
 		g.fillRect(0,0,600,800);
+
+		// playerShip
 		g.setColor(Color.blue);
 		g.fillRect(playerX,playerY,40,40);
+
     }
 }
