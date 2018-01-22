@@ -53,6 +53,7 @@ public final class Game extends JFrame implements ActionListener, KeyListener
 	 */
 	public void actionPerformed(ActionEvent evt)
 	{
+		// refreshes only if there is an actual gamepanel
 		if(gamePanel != null) {gamePanel.refresh(); gamePanel.repaint();}
 	}
 
@@ -89,15 +90,19 @@ class GamePanel extends JPanel
 	private boolean[] keys = new boolean[KeyEvent.KEY_LAST+1]; // boolean array of the keys
 
 	// Image dependencies
-	private Image playerImg  	  = new ImageIcon("playerShip.png").getImage();
-	private Image playerBulletImg = new ImageIcon("playerBullet.png").getImage();
-	private Image enemyBulletImg  = new ImageIcon("enemyBullet.png").getImage();
+	private Image playerImg;
+	private Image playerBulletImg;
+	private Image enemyBulletImg;
 
 	/**
 	 * CONSTRUCTOR
 	 */
 	public GamePanel()
 	{
+		playerImg  	  = new ImageIcon("playerShip.png").getImage();
+		playerBulletImg = new ImageIcon("playerBullet.png").getImage();
+		enemyBulletImg  = new ImageIcon("enemyBullet.png").getImage();
+
 	    playerX = 280;
         playerY = 735;
 		setSize(600,800);
