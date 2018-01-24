@@ -21,7 +21,6 @@ import javax.swing.Timer;
  * The game frame class
  */
 // TODO Move keylistener to game panel
-// ？actionPerformed checking for game == null?
 public final class Game extends JFrame implements ActionListener, KeyListener
 {
 	private final Timer clock; // swing timer
@@ -90,21 +89,24 @@ class GamePanel extends JPanel
 	private boolean[] keys = new boolean[KeyEvent.KEY_LAST+1]; // boolean array of the keys
 
 	// Image dependencies
-	private Image playerImg;
-	private Image playerBulletImg;
-	private Image enemyBulletImg;
+	private Image playerImg		  = new ImageIcon("playerShip.png").getImage();
+	private Image playerBulletImg = new ImageIcon("playerBullet.png").getImage();
+
+	private Image enemyBulletImg  = new ImageIcon("enemyBullet.png").getImage();
+	private Image enemy1Img  = new ImageIcon("enemy1.png").getImage();
+	private Image enemy2Img  = new ImageIcon("enemy2.png").getImage();
+
+	private Image healthBarImg  = new ImageIcon("healthBar.png").getImage();
+
+	private Image heartTKImg  = new ImageIcon("heartTK.png").getImage();
 
 	/**
 	 * CONSTRUCTOR
 	 */
 	public GamePanel()
 	{
-		playerImg  	  = new ImageIcon("playerShip.png").getImage();
-		playerBulletImg = new ImageIcon("playerBullet.png").getImage();
-		enemyBulletImg  = new ImageIcon("enemyBullet.png").getImage();
-
-	    playerX = 280;
-        playerY = 735;
+	    playerX = 275;
+        playerY = 680;
 		setSize(600,800);
 	}
 
@@ -120,12 +122,12 @@ class GamePanel extends JPanel
 	public void refresh()
 	{
 		// X movement
-		if(keys[KeyEvent.VK_RIGHT] && playerX<555 ) {playerX += 5;}
-		if(keys[KeyEvent.VK_LEFT] && playerX>5) {playerX -= 5;}
+		if(keys[KeyEvent.VK_RIGHT] && playerX<545 ) {playerX += 5;} // go right
+		if(keys[KeyEvent.VK_LEFT] && playerX>5) {playerX -= 5;} // go left
 
 		// Y movement
-		if(keys[KeyEvent.VK_UP] && playerY>5) {playerY -= 5;}
-		if(keys[KeyEvent.VK_DOWN] && playerY<735) {playerY += 5;}
+		if(keys[KeyEvent.VK_DOWN] && playerY<680) {playerY += 5;} // go down
+		if(keys[KeyEvent.VK_UP] && playerY>5) {playerY -= 5;} // go up
 
 		// fire
 		if(keys[KeyEvent.VK_SPACE]) {}
@@ -138,6 +140,11 @@ class GamePanel extends JPanel
 
 	}
 
+
+
+	/**
+	 * draws onto the graphic
+	 */
 	@Override
     public void paintComponent(Graphics g)
 	{
@@ -145,13 +152,22 @@ class GamePanel extends JPanel
 		g.setColor(Color.black);
 		g.fillRect(0,0,600,800);
 
-		// playerShip
-		g.setColor(Color.black);
-		g.fillRect(playerX,playerY,40,40);
+		// playerShip rect
+		// g.setColor(Color.black);
+		// g.fillRect(playerX,playerY,40,40);
 
-		// playerImg.paintIcon(this, g, playerX,playerY);
-		g.drawImage(playerImg, playerX, playerY, this);
+		// player
+		// playerImage
 		g.drawImage(playerBulletImg, 90, 90, this);
+		// enemies
+		g.drawImage(enemy1Img, 300, 90, this);
+		g.drawImage(enemy2Img, 300, 190, this);
+		// enemy bullet
 		g.drawImage(enemyBulletImg, 200, 90, this);
+		// health bars
+		g.drawImage(healthBarImg, 10, 730, this);
+		g.drawImage(heartTKImg, 100, 30, this);
+
+		g.drawImage(playerImg, playerX, playerY, this);
     }
 }
