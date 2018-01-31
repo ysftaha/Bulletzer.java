@@ -2,7 +2,7 @@
  * Player.java
  * @author Yusuf A. Taha
  * @see Game.java
- * The player object.
+ * The player object
  */
 
 import java.awt.Graphics;
@@ -10,22 +10,22 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
+// TODO Figure out dying
 public final class Player
 {
 	// ?????????
 	private static final int MAX_DEATH_FRAME = 300;
-	private int dying_frame = 0;
+	private int dying = 0;
 
 	private final GamePanel game;
 
     // Images
-    public static Image PLAYERIMG = new ImageIcon("playerShip.png").getImage();
-    public static Image DEADIMG   = new ImageIcon("deadShip.png").getImage();
+    private static Image PLAYERIMG = new ImageIcon("playerShip.png").getImage();
+    private static Image DEADIMG   = new ImageIcon("deadShip.png").getImage();
 
     // player Info {•̃_•̃}
 	private int x, y;
 	private static final int SPEED = 9;
-
 
     /**
 	 * CONSTRUCTOR
@@ -40,20 +40,19 @@ public final class Player
 		this.y = y;
 		this.game = game;
 	}
-    /**
-     * X coordinate getter
-     * @return int x
-     */
+
+	// SETTERS & GETTERS
+    /** @return int x */
 	public int getX() {return x;}
 
-    /**
-     * Y coordinate getter
-     * @return int y
-     */
+    /** @return int y */
 	public int getY() {return y;}
 
-	public void setDead() {dying_frame = 1;}
-	public void revive() {dying_frame = 0;}
+    /** make player dead */
+	public void setDead() {dying = 1;}
+
+    /** raise player from the dead */
+	public void revive() {dying = 0;}
 
     /**
      * Moves the player horizontaly
@@ -82,10 +81,10 @@ public final class Player
      */
 	public void draw(Graphics g)
     {
-		if (dying_frame > 0)
+		if (dying > 0)
         {
 			// g.drawImage(DEAD, x, y, null);
-			dying_frame += 1;
+			dying += 1;
 		}
 		// if the player is not dead
 		else {g.drawImage(PLAYERIMG, x, y, null);}
