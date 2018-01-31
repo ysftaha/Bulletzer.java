@@ -56,13 +56,23 @@ public final class Player
 	public void revive() {dying_frame = 0;}
 
     /**
-     * Moves the player
+     * Moves the player horizontaly
      * @param direction : false is left true is right
      */
-	public void move(boolean direction)
+	public void moveX(boolean direction)
     {
         x += direction == false ? -SPEED : SPEED;
 		x = Math.max(50, Math.min(600, x)); // ?????????
+	}
+
+    /**
+     * Moves the player vertically
+     * @param direction : false is down true is up
+     */
+	public void moveY(boolean direction)
+    {
+        y += direction == false ? -SPEED : SPEED;
+		y = Math.max(50, Math.min(800, x)); // ?????????
 	}
 
     /**
