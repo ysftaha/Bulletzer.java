@@ -5,27 +5,27 @@
  * The player object.
  */
 
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
-import java.io.IOException;
 import java.awt.Graphics;
-import java.io.File;
+import java.awt.Image;
 
-public class Player
+import javax.swing.ImageIcon;
+
+public final class Player
 {
-
-	private static final int SPEED = 9;
-	// private static final int MAX_DEATH_FRAME = 300;
-    // public static Image deadImg = ImageIcon(new File("Playerdeath.png")).getImage();
-
-    // Images
-    public static Image playerImg = ImageIcon(new File("playerShip.png")).getImage();
-
-    // player Info {•̃_•̃}
-	private int x, y;
+	// ?????????
+	private static final int MAX_DEATH_FRAME = 300;
 	private int dying_frame = 0;
 
 	private final GamePanel game;
+
+    // Images
+    public static Image PLAYERIMG = new ImageIcon("playerShip.png").getImage();
+    public static Image DEADIMG   = new ImageIcon("deadShip.png").getImage();
+
+    // player Info {•̃_•̃}
+	private int x, y;
+	private static final int SPEED = 9;
+
 
     /**
 	 * CONSTRUCTOR
@@ -55,24 +55,30 @@ public class Player
 	public void setDead() {dying_frame = 1;}
 	public void revive() {dying_frame = 0;}
 
-	public void move(Direction direction)
+    /**
+     * Moves the player
+     * @param direction : false is left true is right
+     */
+	public void move(boolean direction)
     {
-        x += direction == Direction.LEFT ? -SPEED : SPEED;
-		// NOTE: 858 is the right boundary of the screen - 52, the width of the shooter sprite.
-		x = Math.max(50, Math.min(858, x));
+        x += direction == false ? -SPEED : SPEED;
+		x = Math.max(50, Math.min(600, x)); // ?????????
 	}
 
+    /**
+     * Draws the player object
+     * @param g : the graphics
+	 * component we drawing to
+     */
 	public void draw(Graphics g)
     {
 		if (dying_frame > 0)
         {
-			g.drawImage(DEAD, x, y, null);
+			// g.drawImage(DEAD, x, y, null);
 			dying_frame += 1;
 		}
-		else
-        {
-			g.drawImage(SHOOTER, x, y, null);
-		}
+		// if the player is not dead
+		else {g.drawImage(PLAYERIMG, x, y, null);}
 	}
 
 }
