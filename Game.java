@@ -49,6 +49,7 @@ public final class Game extends JFrame implements ActionListener, KeyListener
 	/**
 	 * invoked whenever an action occurs
 	 * @param evt : an actionevent that occurred
+	 * @see gamepanel#refresh()
 	 */
 	public void actionPerformed(ActionEvent evt)
 	{
@@ -83,7 +84,7 @@ public final class Game extends JFrame implements ActionListener, KeyListener
     public void keyReleased(KeyEvent keyevt) {gamePanel.setKey(keyevt.getKeyCode(),false);}
 }
 
-class GamePanel extends JPanel
+final class GamePanel extends JPanel
 {
 	private int playerX,playerY;
 	private boolean[] keys = new boolean[KeyEvent.KEY_LAST+1]; // boolean array of the keys
@@ -95,6 +96,7 @@ class GamePanel extends JPanel
 	private Image enemyBulletImg  = new ImageIcon("enemyBullet.png").getImage();
 	private Image enemy1Img  = new ImageIcon("enemy1.png").getImage();
 	private Image enemy2Img  = new ImageIcon("enemy2.png").getImage();
+	private Image enemy3Img  = new ImageIcon("enemy3.png").getImage();
 
 	private Image healthBarImg  = new ImageIcon("healthBar.png").getImage();
 
@@ -119,31 +121,39 @@ class GamePanel extends JPanel
 	 */
     public void setKey(int key, boolean state) {keys[key] = state;}
 
+
+
+	/**
+	 * invoked whenever an action
+	 * is performed to refresh the
+	 * actions and the game state.
+	 */
 	public void refresh()
 	{
 		// X movement
-		if(keys[KeyEvent.VK_RIGHT] && playerX<545 ) {playerX += 5;} // go right
-		if(keys[KeyEvent.VK_LEFT] && playerX>5) {playerX -= 5;} // go left
+		if(keys[KeyEvent.VK_RIGHT] && playerX<545 ) {playerX += 5;} // right
+		if(keys[KeyEvent.VK_LEFT] && playerX>5) {playerX -= 5;} // left
 
 		// Y movement
-		if(keys[KeyEvent.VK_DOWN] && playerY<680) {playerY += 5;} // go down
-		if(keys[KeyEvent.VK_UP] && playerY>5) {playerY -= 5;} // go up
+		if(keys[KeyEvent.VK_DOWN] && playerY<680) {playerY += 5;} // down
+		if(keys[KeyEvent.VK_UP] && playerY>5) {playerY -= 5;} // up
 
 		// fire
 		if(keys[KeyEvent.VK_SPACE]) {}
 
 		// sheild powerup
+		if(keys[KeyEvent.VK_Z]) {}
 
-		// timewarp powerup
+		// penetration powerup
+		if(keys[KeyEvent.VK_X]) {}
 
 		// boost powerup
-
+		// shift+arrows
 	}
 
-
-
 	/**
-	 * draws onto the graphic
+	 * draws to graphic component
+	 * @param g : the graphics component
 	 */
 	@Override
     public void paintComponent(Graphics g)
@@ -162,6 +172,7 @@ class GamePanel extends JPanel
 		// enemies
 		g.drawImage(enemy1Img, 300, 90, this);
 		g.drawImage(enemy2Img, 300, 190, this);
+		g.drawImage(enemy3Img, 300, 290, this);
 		// enemy bullet
 		g.drawImage(enemyBulletImg, 200, 90, this);
 		// health bars
