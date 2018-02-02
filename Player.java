@@ -11,7 +11,7 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 
 // TODO Figure out dying
-public final class Player
+public class Player
 {
 	// ?????????
 	private static final int MAX_DEATH_FRAME = 300;

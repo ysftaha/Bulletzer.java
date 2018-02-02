@@ -21,8 +21,8 @@ import javax.swing.Timer;
 /**
  * The game frame class
  */
-// TODO Move keylistener to game panel
-public final class Game extends JFrame implements ActionListener, KeyListener
+// TODO Move keylistener to game panel ?
+public final class Game extends JFrame implements ActionListener/*,  KeyListener */
 {
 	private final Timer clock; // swing timer
 	private final GamePanel gamePanel; // a gamepanel that controls the player component
@@ -44,7 +44,6 @@ public final class Game extends JFrame implements ActionListener, KeyListener
 		gamePanel = new GamePanel(); // creates the player's game panel
 		add(gamePanel); // adds the game panel to the Game JFrame
 
-		addKeyListener(this);
     }
 
 	/**
@@ -58,12 +57,53 @@ public final class Game extends JFrame implements ActionListener, KeyListener
 		if(gamePanel != null) {gamePanel.refresh(); gamePanel.repaint();}
 	}
 
+
+
 	/**
 	 * Curtains up! Center stage!
 	 * Instantiates the game frame object
 	 * which also instantiates the panel object
 	 */
     public static void main(String...arguments) {Game frame = new Game();}
+}
+
+final class GamePanel extends JPanel implements KeyListener
+{
+	private Player player;
+	private int testX,testY;
+	private boolean[] keys = new boolean[KeyEvent.KEY_LAST+1]; // boolean array of the keys
+
+
+	// Image dependencies
+	private Image playerImg		  = new ImageIcon("playerShip.png").getImage();
+	private Image playerBulletImg = new ImageIcon("playerBullet.png").getImage();
+	private Image enemyBulletImg  = new ImageIcon("enemyBullet.png").getImage();
+	private Image enemy1Img       = new ImageIcon("enemy1.png").getImage();
+	private Image enemy2Img       = new ImageIcon("enemy2.png").getImage();
+	private Image enemy3Img       = new ImageIcon("enemy3.png").getImage();
+	private Image healthBarImg    = new ImageIcon("healthBar.png").getImage();
+	private Image heartTKImg      = new ImageIcon("heartTK.png").getImage();
+
+	/**
+	 * CONSTRUCTOR
+	 */
+	public GamePanel()
+	{
+		player = new Player(275,680,this);
+	    testX = 275;
+        testY = 680;
+		setSize(600,800);
+		addKeyListener(this);
+	}
+
+	/**
+	 * @param key : the key in value on the keyboard
+	 * @param state : the bool state explained below
+	 * sets the state for a key on the keyboard
+	 * true  = pressed
+	 * false = released
+	 */
+    public void setKey(int key, boolean state) {keys[key] = state;}
 
 	/**
 	 * ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯UNUSED⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
@@ -76,53 +116,13 @@ public final class Game extends JFrame implements ActionListener, KeyListener
 	 * invoked when a key is pressed
 	 * @param keyevt : a KeyEvent that occured
 	 */
-    public void keyPressed(KeyEvent keyevt) {gamePanel.setKey(keyevt.getKeyCode(),true);}
+    public void keyPressed(KeyEvent keyevt) {setKey(keyevt.getKeyCode(),true);}
 
 	/**
 	 * invoked when a key is released
 	 * @param keyevt : a KeyEvent that occured
 	 */
-    public void keyReleased(KeyEvent keyevt) {gamePanel.setKey(keyevt.getKeyCode(),false);}
-}
-
-final class GamePanel extends JPanel
-{
-	private int playerX,playerY;
-	private boolean[] keys = new boolean[KeyEvent.KEY_LAST+1]; // boolean array of the keys
-
-	// Image dependencies
-	private Image playerImg		  = new ImageIcon("playerShip.png").getImage();
-	private Image playerBulletImg = new ImageIcon("playerBullet.png").getImage();
-
-	private Image enemyBulletImg  = new ImageIcon("enemyBullet.png").getImage();
-	private Image enemy1Img  = new ImageIcon("enemy1.png").getImage();
-	private Image enemy2Img  = new ImageIcon("enemy2.png").getImage();
-	private Image enemy3Img  = new ImageIcon("enemy3.png").getImage();
-
-	private Image healthBarImg  = new ImageIcon("healthBar.png").getImage();
-
-	private Image heartTKImg  = new ImageIcon("heartTK.png").getImage();
-
-	/**
-	 * CONSTRUCTOR
-	 */
-	public GamePanel()
-	{
-	    playerX = 275;
-        playerY = 680;
-		setSize(600,800);
-	}
-
-	/**
-	 * @param key : the key in value on the keyboard
-	 * @param state : the bool state explained below
-	 * sets the state for a key on the keyboard
-	 * true  = pressed
-	 * false = released
-	 */
-    public void setKey(int key, boolean state) {keys[key] = state;}
-
-
+    public void keyReleased(KeyEvent keyevt) {setKey(keyevt.getKeyCode(),false);}
 
 	/**
 	 * invoked whenever an action
@@ -131,13 +131,15 @@ final class GamePanel extends JPanel
 	 */
 	public void refresh()
 	{
+		requestFocusInWindow();
+
 		// X movement
-		if(keys[KeyEvent.VK_RIGHT] && playerX<545 ) {playerX += 5;} // right
-		if(keys[KeyEvent.VK_LEFT] && playerX>5) {playerX -= 5;} // left
+		if(keys[KeyEvent.VK_RIGHT] && testX<545 ) {testX += 5;} // right
+		if(keys[KeyEvent.VK_LEFT] && testX>5) {testX -= 5;} // left
 
 		// Y movement
-		if(keys[KeyEvent.VK_DOWN] && playerY<680) {playerY += 5;} // down
-		if(keys[KeyEvent.VK_UP] && playerY>5) {playerY -= 5;} // up
+		if(keys[KeyEvent.VK_DOWN] && testY<680) {testY += 5;} // down
+		if(keys[KeyEvent.VK_UP] && testY>5) {testY -= 5;} // up
 
 		// fire
 		if(keys[KeyEvent.VK_SPACE]) {}
@@ -163,11 +165,6 @@ final class GamePanel extends JPanel
 		g.setColor(Color.black);
 		g.fillRect(0,0,600,800);
 
-		// playerShip rect
-		// g.setColor(Color.black);
-		// g.fillRect(playerX,playerY,40,40);
-
-		// player
 		// playerImage
 		g.drawImage(playerBulletImg, 90, 90, this);
 		// enemies
@@ -180,6 +177,6 @@ final class GamePanel extends JPanel
 		g.drawImage(healthBarImg, 10, 730, this);
 		g.drawImage(heartTKImg, 100, 30, this);
 
-		g.drawImage(playerImg, playerX, playerY, this);
+		g.drawImage(playerImg, testX, testY, this);
     }
 }
