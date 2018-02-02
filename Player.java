@@ -13,19 +13,15 @@ import javax.swing.ImageIcon;
 // TODO Figure out dying
 public class Player
 {
-	// ?????????
-	private static final int MAX_DEATH_FRAME = 300;
-	private int dying = 0;
-
-	private final GamePanel game;
+	public final GamePanel game;
 
     // Images
-    private static Image PLAYERIMG = new ImageIcon("playerShip.png").getImage();
-    private static Image DEADIMG   = new ImageIcon("deadShip.png").getImage();
+    private final static Image PLAYERIMG = new ImageIcon("playerShip.png").getImage();
 
-    // player Info {•̃_•̃}
+    // player feilds (Attributes) {•̃_•̃}
 	private int x, y;
-	private static final int SPEED = 9;
+	private int health;
+	private static int speed = 7;
 
     /**
 	 * CONSTRUCTOR
@@ -42,52 +38,38 @@ public class Player
 	}
 
 	// SETTERS & GETTERS
-    /** @return int x */
+
+	public int getHealth() {return health;}
+
+    /**
+     * Adds or subtracts one hp
+     * @param add : a boolean with
+     * false meaning subtract one
+     * from health and true meaning
+     * add one to health
+     */
+	public void setHealth(boolean add) {health += add == false ? -1 : 1 ;}
+
 	public int getX() {return x;}
 
-    /** @return int y */
 	public int getY() {return y;}
-
-    /** make player dead */
-	public void setDead() {dying = 1;}
-
-    /** raise player from the dead */
-	public void revive() {dying = 0;}
 
     /**
      * Moves the player horizontaly
      * @param direction : false is left true is right
      */
-	public void moveX(boolean direction)
-    {
-        x += direction == false ? -SPEED : SPEED;
-		x = Math.max(50, Math.min(600, x)); // ?????????
-	}
+	public void moveX(boolean direction) {x += direction == false ? -speed : speed;}
 
     /**
      * Moves the player vertically
      * @param direction : false is down true is up
      */
-	public void moveY(boolean direction)
-    {
-        y += direction == false ? -SPEED : SPEED;
-		y = Math.max(50, Math.min(800, x)); // ?????????
-	}
+	public void moveY(boolean direction) {y += direction == true ? -speed : speed;}
 
     /**
      * Draws the player object
      * @param g : the graphics
 	 * component we drawing to
      */
-	public void draw(Graphics g)
-    {
-		if (dying > 0)
-        {
-			// g.drawImage(DEAD, x, y, null);
-			dying += 1;
-		}
-		// if the player is not dead
-		else {g.drawImage(PLAYERIMG, x, y, null);}
-	}
-
+	public void draw(Graphics g) {g.drawImage(PLAYERIMG, x, y, null);}
 }

@@ -18,14 +18,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
-/**
- * The game frame class
- */
-// TODO Move keylistener to game panel ?
 public final class Game extends JFrame implements ActionListener/*,  KeyListener */
 {
-	private final Timer clock; // swing timer
-	private final GamePanel gamePanel; // a gamepanel that controls the player component
+	private final Timer CLOCK = new Timer(10, this); // listens to actions every 10 ms
+	private final GamePanel GAMEPANEL; // a gamepanel that controls the player component
 
 	/**
 	 * CONSTRUCTOR
@@ -38,12 +34,10 @@ public final class Game extends JFrame implements ActionListener/*,  KeyListener
 		setResizable(false);
 		setVisible(true);
 
-		clock = new Timer(10, this); // listens to actions every 10 ms
-		clock.start();			     // starts the timer
+		CLOCK.start();		  // starts the timer
 
-		gamePanel = new GamePanel(); // creates the player's game panel
-		add(gamePanel); // adds the game panel to the Game JFrame
-
+		GAMEPANEL = new GamePanel(); // creates the player's game panel
+		add(GAMEPANEL); // adds the game panel to the Game JFrame
     }
 
 	/**
@@ -53,29 +47,25 @@ public final class Game extends JFrame implements ActionListener/*,  KeyListener
 	 */
 	public void actionPerformed(ActionEvent evt)
 	{
-		// refreshes only if there is an actual gamepanel
-		if(gamePanel != null) {gamePanel.refresh(); gamePanel.repaint();}
+		// refreshes only if gamepanel is done initializing
+		if(GAMEPANEL != null) {GAMEPANEL.refresh(); GAMEPANEL.repaint();}
 	}
-
-
 
 	/**
 	 * Curtains up! Center stage!
 	 * Instantiates the game frame object
 	 * which also instantiates the panel object
 	 */
-    public static void main(String...arguments) {Game frame = new Game();}
+    public static void main(String...arguments) {new Game();}
 }
 
 final class GamePanel extends JPanel implements KeyListener
 {
-	private Player player;
-	private int testX,testY;
+	private Player player  = new Player(275,680,this); // the playerObject
 	private boolean[] keys = new boolean[KeyEvent.KEY_LAST+1]; // boolean array of the keys
 
 
-	// Image dependencies
-	private Image playerImg		  = new ImageIcon("playerShip.png").getImage();
+	// Image dependencies <TESTING PURPOSES>
 	private Image playerBulletImg = new ImageIcon("playerBullet.png").getImage();
 	private Image enemyBulletImg  = new ImageIcon("enemyBullet.png").getImage();
 	private Image enemy1Img       = new ImageIcon("enemy1.png").getImage();
@@ -89,9 +79,6 @@ final class GamePanel extends JPanel implements KeyListener
 	 */
 	public GamePanel()
 	{
-		player = new Player(275,680,this);
-	    testX = 275;
-        testY = 680;
 		setSize(600,800);
 		addKeyListener(this);
 	}
@@ -134,12 +121,16 @@ final class GamePanel extends JPanel implements KeyListener
 		requestFocusInWindow();
 
 		// X movement
-		if(keys[KeyEvent.VK_RIGHT] && testX<545 ) {testX += 5;} // right
-		if(keys[KeyEvent.VK_LEFT] && testX>5) {testX -= 5;} // left
+		if(keys[KeyEvent.VK_RIGHT] && player.getX()<545) {player.moveX(true);}
+		if(keys[KeyEvent.VK_LEFT] && player.getX()>5) 	 {player.moveX(false);} // left
 
 		// Y movement
+		/*
 		if(keys[KeyEvent.VK_DOWN] && testY<680) {testY += 5;} // down
 		if(keys[KeyEvent.VK_UP] && testY>5) {testY -= 5;} // up
+		*/
+		if(keys[KeyEvent.VK_DOWN] && player.getY()<680) {player.moveY(false);}
+		if(keys[KeyEvent.VK_UP] &&player.getY()>5) {player.moveY(true);} // left
 
 		// fire
 		if(keys[KeyEvent.VK_SPACE]) {}
@@ -161,11 +152,16 @@ final class GamePanel extends JPanel implements KeyListener
 	@Override
     public void paintComponent(Graphics g)
 	{
+
 		// backGround
 		g.setColor(Color.black);
 		g.fillRect(0,0,600,800);
 
-		// playerImage
+		// The player object
+		player.draw(g);
+
+
+		// player Bullet Image
 		g.drawImage(playerBulletImg, 90, 90, this);
 		// enemies
 		g.drawImage(enemy1Img, 300, 90, this);
@@ -176,7 +172,5 @@ final class GamePanel extends JPanel implements KeyListener
 		// health bars
 		g.drawImage(healthBarImg, 10, 730, this);
 		g.drawImage(heartTKImg, 100, 30, this);
-
-		g.drawImage(playerImg, testX, testY, this);
     }
 }
