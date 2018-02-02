@@ -13,8 +13,6 @@ import javax.swing.ImageIcon;
 // TODO Figure out dying
 public class Player
 {
-	public final GamePanel game;
-
     // Images
     private final static Image PLAYERIMG = new ImageIcon("playerShip.png").getImage();
 
@@ -30,11 +28,10 @@ public class Player
      * @param game : the panel where the
      * player is going to be drawn
 	 */
-	public Player(final int x, final int y, final GamePanel game)
+	public Player(final int x, final int y)
     {
 		this.x = x;
 		this.y = y;
-		this.game = game;
 	}
 
 	// SETTERS & GETTERS

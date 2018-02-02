@@ -61,7 +61,7 @@ public final class Game extends JFrame implements ActionListener/*,  KeyListener
 
 final class GamePanel extends JPanel implements KeyListener
 {
-	private Player player  = new Player(275,680,this); // the playerObject
+	private Player player  = new Player(275,680); // the playerObject
 	private boolean[] keys = new boolean[KeyEvent.KEY_LAST+1]; // boolean array of the keys
 
 
