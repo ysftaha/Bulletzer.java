@@ -18,7 +18,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
-public final class Game extends JFrame implements ActionListener/*,  KeyListener */
+// TODO add alien objects
+// TODO add alien and player
+//		bullet objects
+// TODO add JSON gamefile
+public final class Game extends JFrame implements ActionListener
 {
 	private final Timer CLOCK = new Timer(10, this); // listens to actions every 10 ms
 	private final GamePanel GAMEPANEL; // a gamepanel that controls the player component
