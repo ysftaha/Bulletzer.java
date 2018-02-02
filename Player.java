@@ -14,7 +14,7 @@ import javax.swing.ImageIcon;
 public class Player
 {
     // Images
-    private final static Image PLAYERIMG = new ImageIcon("playerShip.png").getImage();
+    private final static Image PLAYERIMG = new ImageIcon("Images/playerShip.png").getImage();
 
     // player feilds (Attributes) {•̃_•̃}
 	private int x, y;

@@ -66,13 +66,13 @@ final class GamePanel extends JPanel implements KeyListener
 
 
 	// Image dependencies <TESTING PURPOSES>
-	private Image playerBulletImg = new ImageIcon("playerBullet.png").getImage();
-	private Image enemyBulletImg  = new ImageIcon("enemyBullet.png").getImage();
-	private Image enemy1Img       = new ImageIcon("enemy1.png").getImage();
-	private Image enemy2Img       = new ImageIcon("enemy2.png").getImage();
-	private Image enemy3Img       = new ImageIcon("enemy3.png").getImage();
-	private Image healthBarImg    = new ImageIcon("healthBar.png").getImage();
-	private Image heartTKImg      = new ImageIcon("heartTK.png").getImage();
+	private Image playerBulletImg = new ImageIcon("Images/playerBullet.png").getImage();
+	private Image enemyBulletImg  = new ImageIcon("Images/enemyBullet.png").getImage();
+	private Image enemy1Img       = new ImageIcon("Images/enemy1.png").getImage();
+	private Image enemy2Img       = new ImageIcon("Images/enemy2.png").getImage();
+	private Image enemy3Img       = new ImageIcon("Images/enemy3.png").getImage();
+	private Image healthBarImg    = new ImageIcon("Images/healthBar.png").getImage();
+	private Image heartTKImg      = new ImageIcon("Images/heartTK.png").getImage();
 
 	/**
 	 * CONSTRUCTOR
