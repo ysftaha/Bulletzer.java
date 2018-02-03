@@ -1,17 +1,16 @@
 /**
  * Bullet.java
  * @author Yusuf A. Taha
- * @see Game.java
- * @see Player.java
- * @see Enemy.java
- * The Bullet abstract
- * class for both enemy
- * and player
+ * @see PlayerBullet.java
+ * @see EnemyBullet.java
+ * parent class for bullets
+ * in the game 🔫
  */
 
 import java.awt.Graphics;
-
-public final abstract class Bullet
+import java.awt.Image;
+import javax.swing.ImageIcon;
+public abstract class Bullet
 {
 	private int x, y; // the coordinates of the bullet
 
@@ -50,11 +49,14 @@ public final abstract class Bullet
     * meaning the bullet is colliding
     * with the enemy
     */
+
+    /*
 	public boolean collideWith(Enemy enemy)
     {
 		final int ax = enemy.getX(), ay = enemy.getY();
 		return (ax < x && ax + 48 > x && ay < y && ay + 48 > y);
 	}
+    */
 
     /**
      * an overloading function of
@@ -65,11 +67,14 @@ public final abstract class Bullet
      * @return boolean indicating
      * collision
      */
+
+    /*
 	public boolean collideWith(Player player)
     {
 		final int ax = player.getX(), ay = player.getY();
 		return (ax + 10 < x && ax + 42 > x && ay < y && ay + 32 > y);
 	}
+    */
 
     /**
      * Draws the bullet object

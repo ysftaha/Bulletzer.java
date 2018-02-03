@@ -25,6 +25,8 @@ import javax.swing.Timer;
 // TODO add JSON gamefile
 public final class Game extends JFrame implements ActionListener
 {
+	private static final long serialVersionUID = 1L;
+
 	private final Timer CLOCK = new Timer(10, this); // listens to actions every 10 ms
 	private final GamePanel GAMEPANEL; // a gamepanel that controls the player component
 
@@ -66,18 +68,11 @@ public final class Game extends JFrame implements ActionListener
 
 final class GamePanel extends JPanel implements KeyListener
 {
+	private static final long serialVersionUID = 1L;
+
 	private Player player  = new Player(275,680); // the playerObject
 	private boolean[] keys = new boolean[KeyEvent.KEY_LAST+1]; // boolean array of the keys
-
-
-	// Image dependencies <TESTING PURPOSES>
-	private Image playerBulletImg = new ImageIcon("Images/playerBullet.png").getImage();
-	private Image enemyBulletImg  = new ImageIcon("Images/enemyBullet.png").getImage();
-	private Image enemy1Img       = new ImageIcon("Images/enemy1.png").getImage();
-	private Image enemy2Img       = new ImageIcon("Images/enemy2.png").getImage();
-	private Image enemy3Img       = new ImageIcon("Images/enemy3.png").getImage();
-	private Image healthBarImg    = new ImageIcon("Images/healthBar.png").getImage();
-	private Image heartTKImg      = new ImageIcon("Images/heartTK.png").getImage();
+	private PlayerBullet playerBullet = null;
 
 	/**
 	 * CONSTRUCTOR
@@ -127,18 +122,17 @@ final class GamePanel extends JPanel implements KeyListener
 
 		// X movement
 		if(keys[KeyEvent.VK_RIGHT] && player.getX()<545) {player.moveX(true);}
-		if(keys[KeyEvent.VK_LEFT] && player.getX()>5) 	 {player.moveX(false);} // left
+		if(keys[KeyEvent.VK_LEFT] && player.getX()>5) 	 {player.moveX(false);}
 
 		// Y movement
-		/*
-		if(keys[KeyEvent.VK_DOWN] && testY<680) {testY += 5;} // down
-		if(keys[KeyEvent.VK_UP] && testY>5) {testY -= 5;} // up
-		*/
 		if(keys[KeyEvent.VK_DOWN] && player.getY()<680) {player.moveY(false);}
-		if(keys[KeyEvent.VK_UP] &&player.getY()>5) {player.moveY(true);} // left
+		if(keys[KeyEvent.VK_UP] &&player.getY()>5) {player.moveY(true);}
 
-		// fire
-		if(keys[KeyEvent.VK_SPACE]) {}
+		// firing a bullet
+		if(keys[KeyEvent.VK_SPACE])
+		{
+			playerBullet = new PlayerBullet(player.getX()-50, player.getY()-80);
+		}
 
 		// sheild powerup
 		if(keys[KeyEvent.VK_Z]) {}
@@ -157,7 +151,6 @@ final class GamePanel extends JPanel implements KeyListener
 	@Override
     public void paintComponent(Graphics g)
 	{
-
 		// backGround
 		g.setColor(Color.black);
 		g.fillRect(0,0,600,800);
@@ -165,17 +158,7 @@ final class GamePanel extends JPanel implements KeyListener
 		// The player object
 		player.draw(g);
 
-
-		// player Bullet Image
-		g.drawImage(playerBulletImg, 90, 90, this);
-		// enemies
-		g.drawImage(enemy1Img, 300, 90, this);
-		g.drawImage(enemy2Img, 300, 190, this);
-		g.drawImage(enemy3Img, 300, 290, this);
-		// enemy bullet
-		g.drawImage(enemyBulletImg, 200, 90, this);
-		// health bars
-		g.drawImage(healthBarImg, 10, 730, this);
-		g.drawImage(heartTKImg, 100, 30, this);
+		// The player's bullets
+		if(playerBullet!=null) {playerBullet.draw(g);}
     }
 }

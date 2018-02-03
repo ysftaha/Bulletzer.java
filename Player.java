@@ -2,7 +2,7 @@
  * Player.java
  * @author Yusuf A. Taha
  * @see Game.java
- * The player object
+ * The player object 🚀
  */
 
 import java.awt.Graphics;
@@ -10,22 +10,20 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
-public class Player
+public final class Player
 {
     // Images
     private final static Image PLAYERIMG = new ImageIcon("Images/playerShip.png").getImage();
 
-    // player feilds (Attributes) {•̃_•̃}
+    // player object feilds {•̃_•̃}
 	private int x, y;
 	private int health;
-	private static int speed = 7;
+	private int speed = 7;
 
     /**
 	 * CONSTRUCTOR
      * @param x : player's x coordinate
      * @param y : player's y coordinate
-     * @param game : the panel where the
-     * player is going to be drawn
 	 */
 	public Player(final int x, final int y)
     {
@@ -34,17 +32,27 @@ public class Player
 	}
 
 	// SETTERS & GETTERS
-
 	public int getHealth() {return health;}
 
     /**
      * Adds or subtracts one hp
-     * @param add : a boolean with
+     * @param value : a boolean with
      * false meaning subtract one
      * from health and true meaning
      * add one to health
      */
-	public void setHealth(boolean add) {health += add == false ? -1 : 1 ;}
+	public void setHealth(boolean value) {health += value == false ? -1 : 1 ;}
+
+	public int getSpeed() {return speed;}
+
+    /**
+     * increases or decreases
+     * the speed of the player
+     * @param value : a boolean
+     * where false is decrease
+     * and true is increase
+     */
+	public void setSpeed(boolean value) {speed += value== false? -2:2;}
 
 	public int getX() {return x;}
 
