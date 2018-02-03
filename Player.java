@@ -10,7 +10,6 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
-// TODO Figure out dying
 public class Player
 {
     // Images
