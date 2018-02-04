@@ -32,7 +32,7 @@ public abstract class Bullet
 
 	public int getY() {return y;}
 
-	public void moveY() {y += getDeltaY();}
+	public void moveY() {y -= 5;}
 
 	public void moveX() {x += getDeltaX();}
 

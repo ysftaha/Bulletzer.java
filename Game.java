@@ -74,6 +74,10 @@ final class GamePanel extends JPanel implements KeyListener
 	private boolean[] keys = new boolean[KeyEvent.KEY_LAST+1]; // boolean array of the keys
 	private PlayerBullet playerBullet = null;
 
+
+	// Images
+	private final Image HEALTHBAR = new ImageIcon("Images/healthBar.png").getImage();
+
 	/**
 	 * CONSTRUCTOR
 	 */
@@ -129,7 +133,7 @@ final class GamePanel extends JPanel implements KeyListener
 		if(keys[KeyEvent.VK_UP] &&player.getY()>5) {player.moveY(true);}
 
 		// firing a bullet
-		if(keys[KeyEvent.VK_SPACE])
+		if(keys[KeyEvent.VK_SPACE] && playerBullet == null)
 		{
 			playerBullet = new PlayerBullet(player.getX()-50, player.getY()-80);
 		}
@@ -142,6 +146,15 @@ final class GamePanel extends JPanel implements KeyListener
 
 		// boost powerup
 		// shift+arrows
+
+
+		// moving bullet after firing
+		if (playerBullet != null)
+		{
+    		playerBullet.moveY();
+			// removing it if it is out of screen
+    		if (playerBullet.getY() < -25) {playerBullet = null;}
+    	}
 	}
 
 	/**
@@ -153,7 +166,13 @@ final class GamePanel extends JPanel implements KeyListener
 	{
 		// backGround
 		g.setColor(Color.black);
+
+		// healthbars
 		g.fillRect(0,0,600,800);
+		for(int i = 0; i<player.getHealth(); i++)
+		{
+			g.drawImage(HEALTHBAR, 10+(14*i),735,this);
+		}
 
 		// The player object
 		player.draw(g);

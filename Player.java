@@ -16,9 +16,9 @@ public final class Player
     private final static Image PLAYERIMG = new ImageIcon("Images/playerShip.png").getImage();
 
     // player object feilds {•̃_•̃}
-	private int x, y;
-	private int health;
-	private int speed = 7;
+	private static int x, y;
+	private static int health = 5;
+	private static int speed = 7;
 
     /**
 	 * CONSTRUCTOR
@@ -27,8 +27,8 @@ public final class Player
 	 */
 	public Player(final int x, final int y)
     {
-		this.x = x;
-		this.y = y;
+		Player.x = x;
+		Player.y = y;
 	}
 
 	// SETTERS & GETTERS
