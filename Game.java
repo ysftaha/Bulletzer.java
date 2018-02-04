@@ -5,6 +5,8 @@
  *        (._.)
  */
 
+import java.util.LinkedList;
+
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 import java.awt.event.ActionEvent;
@@ -73,6 +75,7 @@ final class GamePanel extends JPanel implements KeyListener
 	private Player player  = new Player(275,680); // the playerObject
 	private boolean[] keys = new boolean[KeyEvent.KEY_LAST+1]; // boolean array of the keys
 	private PlayerBullet playerBullet = null;
+	private LinkedList<PlayerBullet> playerBullets = new LinkedList<PlayerBullet>();
 
 
 	// Images
@@ -130,12 +133,12 @@ final class GamePanel extends JPanel implements KeyListener
 
 		// Y movement
 		if(keys[KeyEvent.VK_DOWN] && player.getY()<680) {player.moveY(false);}
-		if(keys[KeyEvent.VK_UP] &&player.getY()>5) {player.moveY(true);}
+		if(keys[KeyEvent.VK_UP] && player.getY()>5) {player.moveY(true);}
 
 		// firing a bullet
-		if(keys[KeyEvent.VK_SPACE] && playerBullet == null)
+		if(keys[KeyEvent.VK_SPACE])
 		{
-			playerBullet = new PlayerBullet(player.getX()-50, player.getY()-80);
+			playerBullets.add(new PlayerBullet(player.getX()-50, player.getY()-80));
 		}
 
 		// sheild powerup
@@ -149,12 +152,16 @@ final class GamePanel extends JPanel implements KeyListener
 
 
 		// moving bullet after firing
-		if (playerBullet != null)
+		for(int i = 0; i<playerBullets.size(); i++)
 		{
-    		playerBullet.moveY();
-			// removing it if it is out of screen
-    		if (playerBullet.getY() < -25) {playerBullet = null;}
-    	}
+			PlayerBullet bull = playerBullets.get(i);
+			if (bull != null)
+			{
+				bull.moveY();
+				// removing it if it is out of screen
+				if (bull.getY() < -25) {bull = null;}
+			}
+		}
 	}
 
 	/**
@@ -178,6 +185,7 @@ final class GamePanel extends JPanel implements KeyListener
 		player.draw(g);
 
 		// The player's bullets
-		if(playerBullet!=null) {playerBullet.draw(g);}
+		// if(playerBullet!=null) {playerBullet.draw(g);}
+		for (int i = 0; i<playerBullets.size(); i++) {(playerBullets.get(i)).draw(g);}
     }
 }

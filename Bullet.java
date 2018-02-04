@@ -9,6 +9,7 @@
 
 import java.awt.Graphics;
 import java.awt.Image;
+
 import javax.swing.ImageIcon;
 public abstract class Bullet
 {
@@ -34,10 +35,7 @@ public abstract class Bullet
 
 	public void moveY() {y -= 5;}
 
-	public void moveX() {x += getDeltaX();}
-
-	public abstract int getDeltaY();
-	public abstract int getDeltaX();
+	public void moveX() {x += 7;}
 
     /**
      * Checks if the bullet collided
