@@ -23,7 +23,6 @@ import javax.swing.Timer;
 
 // TODO add alien objects
 // TODO add JSON gamefile
-// FIXME fix bullet linked list
 public final class Game extends JFrame implements ActionListener
 {
 	private static final long serialVersionUID = 1L;
@@ -73,8 +72,8 @@ final class GamePanel extends JPanel implements KeyListener
 
 	private Player player  = new Player(275,680); // the playerObject
 	private boolean[] keys = new boolean[KeyEvent.KEY_LAST+1]; // boolean array of the keys
-	private PlayerBullet playerBullet = null;
 	private LinkedList<PlayerBullet> playerBullets = new LinkedList<PlayerBullet>();
+	private int bulletCount = 0;
 
 
 	// Images
@@ -124,6 +123,10 @@ final class GamePanel extends JPanel implements KeyListener
 	 */
 	public void refresh()
 	{
+		// delay for bullet output
+		if(bulletCount == 0){bulletCount = 12;}
+		else{bulletCount --;}
+
 		requestFocusInWindow();
 
 		// X movement
@@ -135,7 +138,7 @@ final class GamePanel extends JPanel implements KeyListener
 		if(keys[KeyEvent.VK_UP] && player.getY()>5) {player.moveY(true);}
 
 		// firing a bullet
-		if(keys[KeyEvent.VK_SPACE])
+		if(keys[KeyEvent.VK_SPACE] && bulletCount == 0)
 		{
 			playerBullets.add(new PlayerBullet(player.getX()-50, player.getY()-80));
 		}
@@ -158,8 +161,13 @@ final class GamePanel extends JPanel implements KeyListener
 			{
 				bull.moveY();
 				// removing it if it is out of screen
-				if (bull.getY() < -25) {bull = null;}
 			}
+		}
+
+		// removing bullets that are out of screen
+		if(playerBullets.size() != 0)
+		{
+			if ((playerBullets.getFirst()).getY() < -30) {playerBullets.removeFirst();}
 		}
 	}
 
