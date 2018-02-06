@@ -22,9 +22,8 @@ import javax.swing.JFrame;
 import javax.swing.Timer;
 
 // TODO add alien objects
-// TODO add alien and player
-//		bullet objects
 // TODO add JSON gamefile
+// FIXME fix bullet linked list
 public final class Game extends JFrame implements ActionListener
 {
 	private static final long serialVersionUID = 1L;
