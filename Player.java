@@ -19,7 +19,9 @@ public final class Player
 	private static int x, y;
 	private static int health = 5;
 	private static int speed  = 7;
-	private static int bulletDelay = 0;
+	private static int bulletDelayInterval = 12; // the interval to wait between bullets
+	private static int bulletDelayIterator = 0;  // decrements by one from
+                                                 // bulletDelayInterval to zero then resets
 
     /**
 	 * CONSTRUCTOR
@@ -32,65 +34,95 @@ public final class Player
 		Player.y = y;
 	}
 
-	// SETTERS & GETTERS
+    ///////////////////////
+	// SETTERS & GETTERS //
+    ///////////////////////
+
     /**
      * @return the Health of the player
      */
-	public int getHealth() {return health;}
+	public static int getHealth() {return health;}
 
     /**
      * @param health : the health
      * to set
      */
-	public void setHealth(int health) {Player.health = health;}
+	public static void setHealth(int health) {Player.health = health;}
 
 	/**
 	 * @return the speed of the player's movement
 	 */
-	public int getSpeed() {return speed;}
+	public static int getSpeed() {return speed;}
 
     /**
      * @param speed : the speed
      * to set
      */
-	public void setSpeed(int speed) {Player.speed = speed;}
+	public static void setSpeed(int speed) {Player.speed = speed;}
 
 	/**
 	 * @return the horizontal coordinate (X)
 	 */
-	public int getX() {return x;}
+	public static int getX() {return x;}
 
     /**
      * Moves the player horizontaly
      * @param direction : false is left true is right
      */
-	public void moveX(boolean direction) {x += direction == false ? -speed : speed;}
+	public static void moveX(boolean direction) {x += direction == false ? -speed : speed;}
 
 	/**
 	 * @return the the vetrical coordinate (Y)
 	 */
-	public int getY() {return y;}
+	public static int getY() {return y;}
 
     /**
      * Moves the player vertically
      * @param direction : false is down true is up
      */
-	public void moveY(boolean direction) {y += direction == true ? -speed : speed;}
+	public static void moveY(boolean direction) {y += direction == true ? -speed : speed;}
 
 	/**
-	 * @return the bulletDelay
+	 * @return the bulletDelayIterator
 	 */
-	public int getBulletDelay() {return bulletDelay;}
+	public static int getBulletDelayIterator() {return bulletDelayIterator;}
 
 	/**
-	 * @param bulletDelay the bulletDelay to set
+	 * @param bulletDelayIterator the bulletDelayIterator to set
 	 */
-	public void setBulletDelay(int bulletDelay) {Player.bulletDelay = bulletDelay;}
+	public static void setBulletDelayIterator(int bulletDelayIterator)
+        {Player.bulletDelayIterator = bulletDelayIterator;}
+
+
+	/**
+	 * @return the bulletDelayInterval
+	 */
+	public static int getBulletDelayInterval() {return bulletDelayInterval;}
+
+	/**
+	 * @param bulletDelayInterval the bulletDelayInterval to set
+	 */
+	public static void setBulletDelayInterval(int bulletDelayInterval)
+        {Player.bulletDelayInterval = bulletDelayInterval;}
+
+    //////////////////////
+    //  OTHER FUNCTIONS //
+    //////////////////////
 
     /**
      * Draws the player object
      * @param g : the graphics
 	 * component we drawing to
      */
-	public void draw(Graphics g) {g.drawImage(PLAYERIMG, x, y, null);}
+	public static void draw(Graphics g) {g.drawImage(PLAYERIMG, x, y, null);}
+
+    /**
+	 * refreshes the bullet delaytime
+     * and speed
+     */
+    public static void refreshBullet()
+    {
+        if (bulletDelayIterator == 0) {bulletDelayIterator = bulletDelayInterval;}
+		else {bulletDelayIterator--;}
+    }
 }

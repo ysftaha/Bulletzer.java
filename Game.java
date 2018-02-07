@@ -2,11 +2,10 @@
  * Game.java
  * @author Yusuf A. Taha
  * Where the magic happens
- *        (._.)
+ *         🎩
  */
 
 import java.util.LinkedList;
-
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 import java.awt.event.ActionEvent;
@@ -120,31 +119,27 @@ final class GamePanel extends JPanel implements KeyListener
 	 */
 	public void refresh()
 	{
-		// delay for bullet output
-		if(player.getBulletDelay() == 0){player.setBulletDelay(12);}
-		else{player.setBulletDelay(player.getBulletDelay()-1);}
+		Player.refreshBullet(); // refreshes the bullet speed and delay
 
 		requestFocusInWindow();
 
 		// X movement
-		if(keys[KeyEvent.VK_RIGHT] && player.getX()<545) {player.moveX(true);}
-		if(keys[KeyEvent.VK_LEFT] && player.getX()>5) 	 {player.moveX(false);}
+		if (keys[KeyEvent.VK_RIGHT] && Player.getX()<545) {Player.moveX(true);}
+		if (keys[KeyEvent.VK_LEFT] && Player.getX()>5) 	 {Player.moveX(false);}
 
 		// Y movement
-		if(keys[KeyEvent.VK_DOWN] && player.getY()<680) {player.moveY(false);}
-		if(keys[KeyEvent.VK_UP] && player.getY()>5) {player.moveY(true);}
+		if (keys[KeyEvent.VK_DOWN] && Player.getY()<680) {Player.moveY(false);}
+		if (keys[KeyEvent.VK_UP] && Player.getY()>5) {Player.moveY(true);}
 
 		// firing a bullet
-		if(keys[KeyEvent.VK_SPACE] && player.getBulletDelay() == 0)
-		{
-			playerBullets.add(new PlayerBullet(player.getX()-50, player.getY()-80));
-		}
+		if (keys[KeyEvent.VK_SPACE] && Player.getBulletDelayIterator() == 0)
+			{playerBullets.add(new PlayerBullet(Player.getX()-50, Player.getY()-80));}
 
 		// sheild powerup
-		if(keys[KeyEvent.VK_Z]) {}
+		if (keys[KeyEvent.VK_Z]) {}
 
 		// penetration powerup
-		if(keys[KeyEvent.VK_X]) {}
+		if (keys[KeyEvent.VK_X]) {}
 
 		// boost powerup
 		// shift+arrows
@@ -152,17 +147,15 @@ final class GamePanel extends JPanel implements KeyListener
 
 
 		// moving bullet after firing
-		for(int i = 0; i<playerBullets.size(); i++)
+		for (int i = 0; i<playerBullets.size(); i++)
 		{
 			PlayerBullet bull = playerBullets.get(i);
 			if (bull != null) {bull.moveY();}
 		}
 
 		// removing bullets that are out of screen
-		if(playerBullets.size() != 0)
-		{
-			if ((playerBullets.getFirst()).getY() < -30) {playerBullets.removeFirst();}
-		}
+		if (playerBullets.size() != 0)
+			{if ((playerBullets.getFirst()).getY() < -30) {playerBullets.removeFirst();}}
 	}
 
 	/**
@@ -177,13 +170,11 @@ final class GamePanel extends JPanel implements KeyListener
 
 		// healthbars
 		g.fillRect(0,0,600,800);
-		for(int i = 0; i<player.getHealth(); i++)
-		{
-			g.drawImage(HEALTHBAR, 10+(14*i),735,this);
-		}
+		for (int i = 0; i<Player.getHealth(); i++)
+			{g.drawImage(HEALTHBAR, 10+(14*i),735,this);}
 
 		// The player object
-		player.draw(g);
+		Player.draw(g);
 
 		// The player's bullets
 		// if(playerBullet!=null) {playerBullet.draw(g);}
