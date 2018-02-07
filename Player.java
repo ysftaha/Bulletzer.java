@@ -44,7 +44,7 @@ public final class Player
 	public static int getHealth() {return health;}
 
     /**
-     * @param health : the health
+     * @param health the health
      * to set
      */
 	public static void setHealth(int health) {Player.health = health;}
@@ -55,7 +55,7 @@ public final class Player
 	public static int getSpeed() {return speed;}
 
     /**
-     * @param speed : the speed
+     * @param speed the speed
      * to set
      */
 	public static void setSpeed(int speed) {Player.speed = speed;}
@@ -67,7 +67,7 @@ public final class Player
 
     /**
      * Moves the player horizontaly
-     * @param direction : false is left true is right
+     * @param direction false is left true is right
      */
 	public static void moveX(boolean direction) {x += direction == false ? -speed : speed;}
 
@@ -78,7 +78,7 @@ public final class Player
 
     /**
      * Moves the player vertically
-     * @param direction : false is down true is up
+     * @param direction false is down true is up
      */
 	public static void moveY(boolean direction) {y += direction == true ? -speed : speed;}
 
