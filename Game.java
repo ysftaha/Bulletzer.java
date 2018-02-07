@@ -22,7 +22,6 @@ import javax.swing.JFrame;
 import javax.swing.Timer;
 
 // TODO add alien objects
-// TODO add JSON gamefile
 public final class Game extends JFrame implements ActionListener
 {
 	private static final long serialVersionUID = 1L;
@@ -73,8 +72,6 @@ final class GamePanel extends JPanel implements KeyListener
 	private Player player  = new Player(275,680); // the playerObject
 	private boolean[] keys = new boolean[KeyEvent.KEY_LAST+1]; // boolean array of the keys
 	private LinkedList<PlayerBullet> playerBullets = new LinkedList<PlayerBullet>();
-	private int bulletCount = 0;
-
 
 	// Images
 	private final Image HEALTHBAR = new ImageIcon("Images/healthBar.png").getImage();
@@ -124,8 +121,8 @@ final class GamePanel extends JPanel implements KeyListener
 	public void refresh()
 	{
 		// delay for bullet output
-		if(bulletCount == 0){bulletCount = 12;}
-		else{bulletCount --;}
+		if(player.getBulletDelay() == 0){player.setBulletDelay(12);}
+		else{player.setBulletDelay(player.getBulletDelay()-1);}
 
 		requestFocusInWindow();
 
@@ -138,7 +135,7 @@ final class GamePanel extends JPanel implements KeyListener
 		if(keys[KeyEvent.VK_UP] && player.getY()>5) {player.moveY(true);}
 
 		// firing a bullet
-		if(keys[KeyEvent.VK_SPACE] && bulletCount == 0)
+		if(keys[KeyEvent.VK_SPACE] && player.getBulletDelay() == 0)
 		{
 			playerBullets.add(new PlayerBullet(player.getX()-50, player.getY()-80));
 		}
@@ -153,15 +150,12 @@ final class GamePanel extends JPanel implements KeyListener
 		// shift+arrows
 
 
+
 		// moving bullet after firing
 		for(int i = 0; i<playerBullets.size(); i++)
 		{
 			PlayerBullet bull = playerBullets.get(i);
-			if (bull != null)
-			{
-				bull.moveY();
-				// removing it if it is out of screen
-			}
+			if (bull != null) {bull.moveY();}
 		}
 
 		// removing bullets that are out of screen
