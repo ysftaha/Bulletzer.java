@@ -6,6 +6,7 @@
  */
 
 import java.util.LinkedList;
+
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 import java.awt.event.ActionEvent;
@@ -68,7 +69,8 @@ final class GamePanel extends JPanel implements KeyListener
 {
 	private static final long serialVersionUID = 1L;
 
-	private Player player  = new Player(275,680); // the playerObject
+	private Enemy yusuf = new Enemy(40, 40, 2, 2);
+
 	private boolean[] keys = new boolean[KeyEvent.KEY_LAST+1]; // boolean array of the keys
 	private LinkedList<PlayerBullet> playerBullets = new LinkedList<PlayerBullet>();
 
@@ -175,9 +177,9 @@ final class GamePanel extends JPanel implements KeyListener
 
 		// The player object
 		Player.draw(g);
+		yusuf.draw(g);
 
 		// The player's bullets
-		// if(playerBullet!=null) {playerBullet.draw(g);}
 		for (int i = 0; i<playerBullets.size(); i++) {(playerBullets.get(i)).draw(g);}
     }
 }

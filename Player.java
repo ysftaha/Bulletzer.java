@@ -12,27 +12,18 @@ import javax.swing.ImageIcon;
 
 public final class Player
 {
+
     // Images
     private final static Image PLAYERIMG = new ImageIcon("Images/playerShip.png").getImage();
 
     // player object feilds {•̃_•̃}
-	private static int x, y;
+	private static int x = 275; // middle of the screen starting point
+	private static int y = 680; // just above the hud starting position
 	private static int health = 5;
 	private static int speed  = 7;
 	private static int bulletDelayInterval = 12; // the interval to wait between bullets
 	private static int bulletDelayIterator = 0;  // decrements by one from
                                                  // bulletDelayInterval to zero then resets
-
-    /**
-	 * CONSTRUCTOR
-     * @param x : player's x coordinate
-     * @param y : player's y coordinate
-	 */
-	public Player(final int x, final int y)
-    {
-		Player.x = x;
-		Player.y = y;
-	}
 
     ///////////////////////
 	// SETTERS & GETTERS //
