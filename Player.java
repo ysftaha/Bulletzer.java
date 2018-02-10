@@ -19,13 +19,9 @@ public final class Player
     // player object feilds {•̃_•̃}
 
     // ACESSABLE
-	private static int x = 275; // middle of the screen starting point
-	private static int y = 680; // just above the hud starting position
-	private static int health = 5;
-	private static int speed  = 7;
+	private static int x = 275, y = 680; // middle of the screen above the hud starting point
+	private static int health = 5, speed  = 7;
 	private static int bulletDelayInterval = 12; // the interval to wait between bullets
-
-    // INACESSABLE
 	private static int bulletDelayIterator = 0;  // decrements by one from
                                                  // bulletDelayInterval to zero then resets
 
@@ -87,6 +83,17 @@ public final class Player
 	 */
 	public static void setBulletDelayInterval(int bulletDelayInterval)
         {Player.bulletDelayInterval = bulletDelayInterval;}
+
+	/**
+	 * @return the bulletDelayIterator
+	 */
+	public static int getBulletDelayIterator() {return bulletDelayIterator;}
+
+	/**
+	 * @param bulletDelayIterator the bulletDelayIterator to set
+	 */
+	public static void setBulletDelayIterator(int bulletDelayIteratorArg)
+        {bulletDelayIterator = bulletDelayIteratorArg;}
 
     //////////////////////
     //  OTHER FUNCTIONS //
