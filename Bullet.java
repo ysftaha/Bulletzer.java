@@ -11,9 +11,12 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 import javax.swing.ImageIcon;
-public abstract class Bullet
+
+public class Bullet
 {
-	private int x, y; // the coordinates of the bullet
+	private int x, y;      // the coordinates of the bullet
+	private Image img;     // the bullet sprite
+    private int speed = 9; // the bullet's speed
 
     /**
      * CONSTRUCTOR
@@ -22,20 +25,38 @@ public abstract class Bullet
      * @param y : the vertical
      * coordinate of the bullet
      */
-	public Bullet(final int x, final int y)
+	public Bullet(final Image img, final int x, final int y)
     {
 		this.x = x;
 		this.y = y;
+		this.img = img;
 	}
 
-	// SETTERS & GETTERS
+    ///////////////////////
+	// SETTERS & GETTERS //
+    ///////////////////////
+
+    /**
+     * @return the Bullet's horizontal component (X)
+     */
     public int getX() {return x;}
 
+    /**
+     * Moves the Bullet horizontaly
+     * @param direction false is left true is right
+     */
+	public void moveX(final boolean direction) {x += direction == false ? -speed : speed;}
+
+    /**
+     * @return the Bullet's vertical component (Y)
+     */
 	public int getY() {return y;}
 
-	public void moveY() {y -= 7;}
-
-	public void moveX() {x += 7;}
+    /**
+     * Moves the Bullet vertically
+     * @param direction false is down true is up
+     */
+	public void moveY(final boolean direction) {y += direction == true ? -speed : speed;}
 
     /**
      * Checks if the bullet collided
@@ -74,11 +95,16 @@ public abstract class Bullet
 	}
     */
 
+	//////////////////////
+    //  OTHER FUNCTIONS //
+    //////////////////////
+
     /**
      * Draws the bullet object
-     * @param g : the graphics
+     * @param g the graphics
 	 * component we drawing to
      */
-	public abstract void draw(Graphics g);
+	public void draw(final Graphics g)
+        {g.drawImage(img, getX(), getY(), null);}
 
 }
