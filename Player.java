@@ -17,39 +17,21 @@ public final class Player
     private final static Image PLAYERIMG = new ImageIcon("Images/playerShip.png").getImage();
 
     // player object feilds {•̃_•̃}
+
+    // ACESSABLE
 	private static int x = 275; // middle of the screen starting point
 	private static int y = 680; // just above the hud starting position
 	private static int health = 5;
 	private static int speed  = 7;
 	private static int bulletDelayInterval = 12; // the interval to wait between bullets
+
+    // INACESSABLE
 	private static int bulletDelayIterator = 0;  // decrements by one from
                                                  // bulletDelayInterval to zero then resets
 
     ///////////////////////
 	// SETTERS & GETTERS //
     ///////////////////////
-
-    /**
-     * @return the Health of the player
-     */
-	public static int getHealth() {return health;}
-
-    /**
-     * @param health the health
-     * to set
-     */
-	public static void setHealth(int health) {Player.health = health;}
-
-	/**
-	 * @return the speed of the player's movement
-	 */
-	public static int getSpeed() {return speed;}
-
-    /**
-     * @param speed the speed
-     * to set
-     */
-	public static void setSpeed(int speed) {Player.speed = speed;}
 
 	/**
 	 * @return the horizontal coordinate (X)
@@ -73,17 +55,27 @@ public final class Player
      */
 	public static void moveY(boolean direction) {y += direction == true ? -speed : speed;}
 
-	/**
-	 * @return the bulletDelayIterator
-	 */
-	public static int getBulletDelayIterator() {return bulletDelayIterator;}
+    /**
+     * @return the Health of the player
+     */
+	public static int getHealth() {return health;}
+
+    /**
+     * @param health the health
+     * to set
+     */
+	public static void setHealth(int health) {Player.health = health;}
 
 	/**
-	 * @param bulletDelayIterator the bulletDelayIterator to set
+	 * @return the speed of the player's movement
 	 */
-	public static void setBulletDelayIterator(int bulletDelayIterator)
-        {Player.bulletDelayIterator = bulletDelayIterator;}
+	public static int getSpeed() {return speed;}
 
+    /**
+     * @param speed the speed
+     * to set
+     */
+	public static void setSpeed(int speed) {Player.speed = speed;}
 
 	/**
 	 * @return the bulletDelayInterval
