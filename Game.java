@@ -51,7 +51,7 @@ public final class Game extends JFrame implements ActionListener
 	 * @param evt : an actionevent that occurred
 	 * @see gamepanel#refresh()
 	 */
-	public void actionPerformed(ActionEvent evt)
+	public void actionPerformed(final ActionEvent evt)
 	{
 		// refreshes only if gamepanel is done initializing
 		if(GAMEPANEL != null) {GAMEPANEL.refresh(); GAMEPANEL.repaint();}
@@ -62,7 +62,7 @@ public final class Game extends JFrame implements ActionListener
 	 * Instantiates the game frame object
 	 * which also instantiates the panel object
 	 */
-    public static void main(String...arguments) {new Game();}
+    public static void main(final String...arguments) {new Game();}
 }
 
 final class GamePanel extends JPanel implements KeyListener
@@ -76,6 +76,8 @@ final class GamePanel extends JPanel implements KeyListener
 
 	// Images
 	private final Image HEALTHBAR = new ImageIcon("Images/healthBar.png").getImage();
+
+	private final Image PLAYERB = new ImageIcon("Images/playerBullet.png").getImage();
 
 	/**
 	 * CONSTRUCTOR
@@ -93,26 +95,26 @@ final class GamePanel extends JPanel implements KeyListener
 	 * true  = pressed
 	 * false = released
 	 */
-    public void setKey(int key, boolean state) {keys[key] = state;}
+    public void setKey(final int key, final boolean state) {keys[key] = state;}
 
 	/**
 	 * ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯UNUSED⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
 	 * invoked when a key is typed
 	 * @param keyevt : a KeyEvent that occured
 	 */
-    public void keyTyped(KeyEvent keyevt) {}
+    public void keyTyped(final KeyEvent keyevt) {}
 
 	/**
 	 * invoked when a key is pressed
 	 * @param keyevt : a KeyEvent that occured
 	 */
-    public void keyPressed(KeyEvent keyevt) {setKey(keyevt.getKeyCode(),true);}
+    public void keyPressed(final KeyEvent keyevt) {setKey(keyevt.getKeyCode(),true);}
 
 	/**
 	 * invoked when a key is released
 	 * @param keyevt : a KeyEvent that occured
 	 */
-    public void keyReleased(KeyEvent keyevt) {setKey(keyevt.getKeyCode(),false);}
+    public void keyReleased(final KeyEvent keyevt) {setKey(keyevt.getKeyCode(),false);}
 
 	/**
 	 * invoked whenever an action
@@ -135,7 +137,7 @@ final class GamePanel extends JPanel implements KeyListener
 
 		// firing a bullet
 		if (keys[KeyEvent.VK_SPACE] && Player.getBulletDelayIterator() == 0)
-			{playerBullets.add(new PlayerBullet(Player.getX()-50, Player.getY()-80));}
+			{playerBullets.add(new PlayerBullet(PLAYERB, Player.getX()-50, Player.getY()-80));}
 
 		// sheild powerup
 		if (keys[KeyEvent.VK_Z]) {}
@@ -152,7 +154,7 @@ final class GamePanel extends JPanel implements KeyListener
 		for (int i = 0; i<playerBullets.size(); i++)
 		{
 			PlayerBullet bull = playerBullets.get(i);
-			if (bull != null) {bull.moveY();}
+			if (bull != null) {bull.moveY(true);}
 		}
 
 		// removing bullets that are out of screen
@@ -165,7 +167,7 @@ final class GamePanel extends JPanel implements KeyListener
 	 * @param g : the graphics component
 	 */
 	@Override
-    public void paintComponent(Graphics g)
+    public void paintComponent(final Graphics g)
 	{
 		// backGround
 		g.setColor(Color.black);

@@ -5,7 +5,6 @@ import javax.swing.ImageIcon;
 
 public class PlayerBullet extends Bullet
 {
-    private static Image BULLETIMG = new ImageIcon("Images/playerBullet.png").getImage();
 
     /**
      * CONSTRUCTOR
@@ -13,14 +12,7 @@ public class PlayerBullet extends Bullet
      * @param y : Bullet's vertical coordinate
      * @see Bullet.java CONSTRICTOR for super
      */
-    public PlayerBullet(final int x, final int y) {super(x,y);}
-
-    public int getDeltaY() {return -10;}
-	public int getDeltaX() {return 0;}
-
-    public void draw(Graphics g)
-    {
-        g.drawImage(BULLETIMG, getX(), getY(), null);
-    }
+    public PlayerBullet(final Image img, final int x, final int y)
+        {super(img,x,y);}
 
 }
