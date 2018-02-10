@@ -12,10 +12,12 @@ public class Token
 
     private int x, y;
     private int speed = 10, type;
-	private String[] imageDirs = {"Images/healthTK.png"};
+	private String[] imageDirs =
+		{"Images/healthTK.png", "Images/sheildTK.png", "Images/bulletTK.png"};
 
     public Token(final int type, final int x, final int y)
     {
+		this.type = type;
         this.x = x;
         this.y = y;
     }
@@ -73,11 +75,43 @@ public class Token
 	public void draw(final Graphics g)
 		{g.drawImage(img, getX(), getY(), null);}
 
-	public boolean collideObject(final Player player)
+	private boolean collidePlayer()
 	{
 		final int ax = Player.getX(), ay = Player.getY();
 		return (ax + 10 < x && ax + 42 > x && ay < y && ay + 32 > y);
 	}
 
-	public void reward() {}
+	public void reward()
+	{
+		int playerFeild;
+		switch(type)
+		{
+			case 1: // 1 health token
+				playerFeild = Player.getHealth();
+				if (Player.getHealth()<6)
+				{
+					playerFeild += this.collidePlayer()? 1:0;
+					Player.setHealth(playerFeild);
+				}
+				break;
+
+			case 2: // speed token
+				playerFeild = Player.getSpeed();
+				if (Player.getSpeed()<12)
+				{
+					playerFeild += this.collidePlayer()? 3:0;
+					Player.setSpeed(playerFeild);
+				}
+				break;
+
+			case 3: // sheild token
+				playerField = Player.isSheilded();
+				if (Player.isSheilded() == false) {Player.setSheilded(true);}
+				break;
+
+			default:
+				System.out.println("Token type invalid");
+				break;
+		}
+	}
 }
