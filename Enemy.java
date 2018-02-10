@@ -43,7 +43,7 @@ public final class  Enemy
      * Moves the enemy horizontaly
      * @param direction false is left true is right
      */
-    public void moveX(boolean direction) {x += direction == false ? -speed : speed;}
+    public void moveX(final boolean direction) {x += direction == false ? -speed : speed;}
 
 	/**
 	 * @return the enemy's vertical component (y)
@@ -54,17 +54,7 @@ public final class  Enemy
      * Moves the enemy vertically
      * @param direction false is down true is up
      */
-	public void moveY(boolean direction) {y += direction == true ? -speed : speed;}
-
-	/**
-	 * @return the enemyImg
-	 */
-	public Image getEnemyImg() {return enemyImg;}
-
-	/**
-	 * @param enemyImg the enemyImg to set
-	 */
-	public void setEnemyImg(Image enemyImg) {this.enemyImg = enemyImg;}
+	public void moveY(final boolean direction) {y += direction == true ? -speed : speed;}
 
 	/**
 	 * @return the enemy's moving speed
@@ -74,7 +64,7 @@ public final class  Enemy
 	/**
 	 * @param speed the enemy's moving speed to set
 	 */
-	public void setSpeed(int speed) {this.speed = speed;}
+	public void setSpeed(final int speed) {this.speed = speed;}
 
 	/**
 	 * @return the type
@@ -84,11 +74,11 @@ public final class  Enemy
 	/**
 	 * @param type the type to set
 	 */
-	public void setType(int type) {this.type = type;}
+	public void setType(final int type) {this.type = type;}
 
     //////////////////////
     //  OTHER FUNCTIONS //
     //////////////////////
 
-    public void draw(Graphics g) {g.drawImage(enemyImg, x, y, null);}
+    public void draw(final Graphics g) {g.drawImage(enemyImg, x, y, null);}
 }
