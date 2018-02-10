@@ -21,6 +21,7 @@ public final class Player
     // ACESSABLE
 	private static int x = 275, y = 680; // middle of the screen above the hud starting point
 	private static int health = 5, speed  = 7;
+    private static boolean sheilded = false;
 	private static int bulletDelayInterval = 12; // the interval to wait between bullets
 	private static int bulletDelayIterator = 0;  // decrements by one from
                                                  // bulletDelayInterval to zero then resets
@@ -74,26 +75,24 @@ public final class Player
 	public static void setSpeed(int speed) {Player.speed = speed;}
 
 	/**
+	 * @return the sheilded
+	 */
+	public static boolean isSheilded() {return sheilded;}
+
+	/**
+	 * @param sheilded the sheilded to set
+	 */
+	public static void setSheilded(boolean sheilded) {Player.sheilded = sheilded;}
+
+	/**
 	 * @return the bulletDelayInterval
 	 */
 	public static int getBulletDelayInterval() {return bulletDelayInterval;}
 
 	/**
-	 * @param bulletDelayInterval the bulletDelayInterval to set
-	 */
-	public static void setBulletDelayInterval(int bulletDelayInterval)
-        {Player.bulletDelayInterval = bulletDelayInterval;}
-
-	/**
 	 * @return the bulletDelayIterator
 	 */
 	public static int getBulletDelayIterator() {return bulletDelayIterator;}
-
-	/**
-	 * @param bulletDelayIterator the bulletDelayIterator to set
-	 */
-	public static void setBulletDelayIterator(int bulletDelayIteratorArg)
-        {bulletDelayIterator = bulletDelayIteratorArg;}
 
     //////////////////////
     //  OTHER FUNCTIONS //
@@ -115,4 +114,5 @@ public final class Player
         if (bulletDelayIterator == 0) {bulletDelayIterator = bulletDelayInterval;}
 		else {bulletDelayIterator--;}
     }
+
 }
