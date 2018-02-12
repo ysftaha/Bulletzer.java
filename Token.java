@@ -1,11 +1,13 @@
 /**
  * Token.java
  * @author Yusuf A. Taha
- * Token's parent class
+ * Token's class
  */
 
 import java.awt.Graphics;
+import java.awt.Image;
 
+import javax.swing.ImageIcon;
 
 public class Token
 {
@@ -13,7 +15,7 @@ public class Token
     private int x, y;
     private int speed = 10, type;
 	private String[] imageDirs =
-		{"Images/healthTK.png", "Images/sheildTK.png", "Images/bulletTK.png"};
+		{"Images/heartTK.png", "Images/sheildTK.png", "Images/bulletTK.png"};
 
     public Token(final int type, final int x, final int y)
     {
@@ -73,9 +75,9 @@ public class Token
 	 * component we drawing to
      */
 	public void draw(final Graphics g)
-		{g.drawImage(img, getX(), getY(), null);}
+		{g.drawImage(new ImageIcon(imageDirs[type-1]).getImage(), getX(), getY(), null);}
 
-	private boolean collidePlayer()
+	public boolean collidePlayer()
 	{
 		final int ax = Player.getX(), ay = Player.getY();
 		return (ax + 10 < x && ax + 42 > x && ay < y && ay + 32 > y);
@@ -83,30 +85,16 @@ public class Token
 
 	public void reward()
 	{
-		int playerFeild;
 		switch(type)
 		{
 			case 1: // 1 health token
-				playerFeild = Player.getHealth();
-				if (Player.getHealth()<6)
-				{
-					playerFeild += this.collidePlayer()? 1:0;
-					Player.setHealth(playerFeild);
-				}
+				if (Player.getHealth()<6) {Player.setHealth(Player.getHealth()+1);}
 				break;
 
 			case 2: // speed token
-				playerFeild = Player.getSpeed();
-				if (Player.getSpeed()<12)
-				{
-					playerFeild += this.collidePlayer()? 3:0;
-					Player.setSpeed(playerFeild);
-				}
 				break;
 
 			case 3: // sheild token
-				playerField = Player.isSheilded();
-				if (Player.isSheilded() == false) {Player.setSheilded(true);}
 				break;
 
 			default:
