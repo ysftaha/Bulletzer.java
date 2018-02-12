@@ -69,15 +69,15 @@ final class GamePanel extends JPanel implements KeyListener
 {
 	private static final long serialVersionUID = 1L;
 
-	private Enemy yusuf = new Enemy(40, 40, 2, 2);
+	private Token tkn = new Token(1, 60, 60);
 
 	private boolean[] keys = new boolean[KeyEvent.KEY_LAST+1]; // boolean array of the keys
 	private LinkedList<PlayerBullet> playerBullets = new LinkedList<PlayerBullet>();
 
 	// Images
 	private final Image HEALTHBAR = new ImageIcon("Images/healthBar.png").getImage();
-
 	private final Image PLAYERB = new ImageIcon("Images/playerBullet.png").getImage();
+	private final Image SHEILDED = new ImageIcon("Images/sheildHUD.png").getImage();
 
 	/**
 	 * CONSTRUCTOR
@@ -177,9 +177,14 @@ final class GamePanel extends JPanel implements KeyListener
 		for (int i = 0; i<Player.getHealth(); i++)
 			{g.drawImage(HEALTHBAR, 10+(14*i),735,this);}
 
+		// sheilded mask over healthbars
+		if (Player.isSheilded())
+			{g.drawImage(SHEILDED, -230,660,this);}
+
 		// The player object
 		Player.draw(g);
-		yusuf.draw(g);
+
+		tkn.draw(g);
 
 		// The player's bullets
 		for (int i = 0; i<playerBullets.size(); i++) {(playerBullets.get(i)).draw(g);}
