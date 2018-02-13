@@ -6,6 +6,7 @@
  */
 
 import java.util.LinkedList;
+import java.util.ArrayList;
 
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
@@ -69,15 +70,16 @@ final class GamePanel extends JPanel implements KeyListener
 {
 	private static final long serialVersionUID = 1L;
 
-	private Token tkn = new Token(1, 60, 60);
-
 	private boolean[] keys = new boolean[KeyEvent.KEY_LAST+1]; // boolean array of the keys
 	private LinkedList<PlayerBullet> playerBullets = new LinkedList<PlayerBullet>();
+	private ArrayList<Token> tokens = new ArrayList<Token>();
 
 	// Images
 	private final Image HEALTHBAR = new ImageIcon("Images/healthBar.png").getImage();
 	private final Image PLAYERB = new ImageIcon("Images/playerBullet.png").getImage();
 	private final Image SHEILDED = new ImageIcon("Images/sheildHUD.png").getImage();
+
+	private int tokenProbability;
 
 	/**
 	 * CONSTRUCTOR
@@ -123,6 +125,7 @@ final class GamePanel extends JPanel implements KeyListener
 	 */
 	public void refresh()
 	{
+		tokenProbability = (int)(Math.random() * 50 +1);
 		Player.refreshBullet(); // refreshes the bullet speed and delay
 
 		requestFocusInWindow();
@@ -146,6 +149,7 @@ final class GamePanel extends JPanel implements KeyListener
 		if (keys[KeyEvent.VK_X]) {}
 
 		// boost powerup
+
 		// shift+arrows
 
 
@@ -164,7 +168,7 @@ final class GamePanel extends JPanel implements KeyListener
 
 	/**
 	 * draws to graphic component
-	 * @param g : the graphics component
+	 * @param g the graphics component
 	 */
 	@Override
     public void paintComponent(final Graphics g)
@@ -184,7 +188,11 @@ final class GamePanel extends JPanel implements KeyListener
 		// The player object
 		Player.draw(g);
 
-		tkn.draw(g);
+		// TOKENS
+		// 	spawnng
+		if (tokenProbability == 1) {tokens.add(new Token((int)(Math.random()*3 + 1), (int)(Math.random()*560 + 10), 5));}
+		//	drawing
+		for (Token token : tokens) {token.draw(g);}
 
 		// The player's bullets
 		for (int i = 0; i<playerBullets.size(); i++) {(playerBullets.get(i)).draw(g);}
