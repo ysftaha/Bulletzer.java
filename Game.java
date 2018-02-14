@@ -125,7 +125,7 @@ final class GamePanel extends JPanel implements KeyListener
 	 */
 	public void refresh()
 	{
-		tokenProbability = (int)(Math.random() * 50 +1);
+		tokenProbability = (int)(Math.random() * 200 +1);
 		Player.refreshBullet(); // refreshes the bullet speed and delay
 
 		requestFocusInWindow();
