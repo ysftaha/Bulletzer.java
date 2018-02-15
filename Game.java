@@ -242,10 +242,13 @@ final class GamePanel extends JPanel implements KeyListener
 			}
 		}
 
-		g.drawImage(DARKENERGY, 50,50,this);
+		// g.drawImage(DARKENERGY, 50,50,this);
 		// healthbars
 		for (int i = 0; i<Player.getHealth(); i++)
 			{g.drawImage(HEALTHBAR, 10+(14*i),735,this);}
+
+		for (int i = 0; i<Player.getdarkEnergy(); i++)
+			{g.drawImage(DARKENERGY, 580 - (14*i),735,this);}
 
 		// sheilded mask over healthbars
 		if (Player.isSheilded())
