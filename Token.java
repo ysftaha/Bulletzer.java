@@ -77,19 +77,36 @@ public class Token
 	public void draw(final Graphics g)
 		{g.drawImage(new ImageIcon(imageDirs[type-1]).getImage(), getX(), getY(), null);}
 
+	/**
+	 * checks if for collision
+	 * between the token and the
+	 * player object
+	 * @return true if the token
+	 * collided. Else returns false
+	 */
 	public boolean collidePlayer()
 	{
 		final int playerX = Player.getX(), playerY = Player.getY();
 		return (playerX - 10 < x && playerX + 42 > x && playerY < y && playerY + 32 > y);
 	}
 
+	/**
+	 * Classic +1 life for a max of 5
+	 */
 	public void rewardHealth()
 		{if (Player.getHealth() < 5) {Player.setHealth(Player.getHealth()+1);} }
 
+	/**
+	 * sheilds the player for 10 seconds
+	 * making enemy bullets futile. MWAHAHAHAAA
+	 */
 	public void rewardSheild()
 		{Player.setSheilded(true);}
 
+	/**
+	 * Increases the allowed player
+	 * bullets on screen. i.e. Machinegun
+	 * */
 	public void rewardFrenzy()
 		{Player.setBulletDelayInterval(6);}
-
 }
