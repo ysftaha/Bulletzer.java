@@ -68,18 +68,29 @@ public final class Game extends JFrame implements ActionListener
 
 final class GamePanel extends JPanel implements KeyListener
 {
+	// dont worry about this for now
 	private static final long serialVersionUID = 1L;
 
-	private boolean[] keys = new boolean[KeyEvent.KEY_LAST+1]; // boolean array of the keys
-	private LinkedList<PlayerBullet> playerBullets = new LinkedList<PlayerBullet>();
-	private ArrayList<Token> tokens = new ArrayList<Token>();
+	// boolean array of the keys
+	private static boolean[] keys = new boolean[KeyEvent.KEY_LAST+1];
+	//arraylist of player bullets on screen
+	private static LinkedList<PlayerBullet> playerBullets = new LinkedList<PlayerBullet>();
+	// arraylist of tokens on screen
+	private static ArrayList<Token> tokens = new ArrayList<Token>();
+	// array of timers for tokens (sheild and frenzy)
+	private static int[]  tokensTmr = {10,10};
+	private static boolean[]  tokensTmrSwitch = {false,false};
+
+	// probability of a token spawning
+	private int tokenProbability;
 
 	// Images
-	private final Image HEALTHBAR = new ImageIcon("Images/healthBar.png").getImage();
-	private final Image PLAYERB = new ImageIcon("Images/playerBullet.png").getImage();
-	private final Image SHEILDED = new ImageIcon("Images/sheildHUD.png").getImage();
+	private static final Image HEALTHBAR = new ImageIcon("Images/healthBar.png").getImage();
+	private static final Image PLAYERB = new ImageIcon("Images/playerBullet.png").getImage();
+	private static final Image SHEILDED = new ImageIcon("Images/sheildHUD.png").getImage();
 
-	private int tokenProbability;
+
+	static {tokens.add(new Token(2, 50, 50));}
 
 	/**
 	 * CONSTRUCTOR
@@ -188,11 +199,54 @@ final class GamePanel extends JPanel implements KeyListener
 		// The player object
 		Player.draw(g);
 
+		/*
 		// TOKENS
 		// 	spawnng
 		if (tokenProbability == 1) {tokens.add(new Token((int)(Math.random()*3 + 1), (int)(Math.random()*560 + 10), 5));}
 		//	drawing
-		for (Token token : tokens) {token.draw(g);}
+		for (Token token : tokens)
+		{
+			token.draw(g);
+			// token.moveY(false);
+			if (token.collidePlayer())
+			{
+				token.reward();
+				tokens.remove(token);
+			}
+		}
+		*/
+
+		for (Token tkn : tokens)
+		{
+			tkn.draw(g);
+			if (tkn.collidePlayer())
+			{
+				switch (tkn.getType())
+				{
+					case 1:
+						tkn.rewardHealth();
+						break;
+
+					case 2:
+						tkn.rewardSheild();
+						tokensTmrSwitch[0] = true; // sets the sheilded
+												   // timer countdown to start
+						break;
+
+					case 3:
+						tkn.rewardFrenzy();
+						tokensTmrSwitch[1] = true;// sets the Frenzy
+												  // timer countdown to start
+						break;
+
+					default:
+						System.out.println("Token type Error!");
+						break;
+				}
+
+				tokens.remove(tkn);
+			}
+		}
 
 		// The player's bullets
 		for (int i = 0; i<playerBullets.size(); i++) {(playerBullets.get(i)).draw(g);}
