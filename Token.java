@@ -13,7 +13,7 @@ public class Token
 {
 
     private int x, y;
-    private int speed = 10, type;
+    private int speed = 6, type;
 	private String[] imageDirs =
 		{"Images/heartTK.png", "Images/sheildTK.png", "Images/bulletTK.png"};
 
@@ -79,27 +79,17 @@ public class Token
 
 	public boolean collidePlayer()
 	{
-		final int ax = Player.getX(), ay = Player.getY();
-		return (ax + 10 < x && ax + 42 > x && ay < y && ay + 32 > y);
+		final int playerX = Player.getX(), playerY = Player.getY();
+		return (playerX - 10 < x && playerX + 42 > x && playerY < y && playerY + 32 > y);
 	}
 
-	// public void reward()
-	// {
-	// 	switch(type)
-	// 	{
-	// 		case 1: // 1 health token
-	// 			if (Player.getHealth()<6) {Player.setHealth(Player.getHealth()+1);}
-	// 			break;
+	public void rewardHealth()
+		{if (Player.getHealth() < 5) {Player.setHealth(Player.getHealth()+1);} }
 
-	// 		case 2: // speed token
-	// 			break;
+	public void rewardSheild()
+		{Player.setSheilded(true);}
 
-	// 		case 3: // sheild token
-	// 			break;
+	public void rewardFrenzy()
+		{Player.setBulletDelayInterval(6);}
 
-	// 		default:
-	// 			System.out.println("Token type invalid");
-	// 			break;
-	// 	}
-	// }
 }
