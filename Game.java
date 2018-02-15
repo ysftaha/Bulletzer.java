@@ -79,6 +79,7 @@ final class GamePanel extends JPanel implements KeyListener
 	private static ArrayList<Token> tokens = new ArrayList<Token>();
 	// array of timers for tokens (sheild and frenzy)
 	private static int[]  tokensTmr = {1000,1000};
+	// boolean list for the previous list to turn in countdown (decrementing)
 	private static boolean[]  tokensTmrSwitch = {false,false};
 
 	// probability of a token spawning
@@ -86,11 +87,9 @@ final class GamePanel extends JPanel implements KeyListener
 
 	// Images
 	private static final Image HEALTHBAR = new ImageIcon("Images/healthBar.png").getImage();
+	private static final Image DARKENERGY = new ImageIcon("Images/darkEnergyBar.png").getImage();
 	private static final Image PLAYERB = new ImageIcon("Images/playerBullet.png").getImage();
 	private static final Image SHEILDED = new ImageIcon("Images/sheildHUD.png").getImage();
-
-
-	static {tokens.add(new Token(2, 50, 50));}
 
 	/**
 	 * CONSTRUCTOR
@@ -136,7 +135,7 @@ final class GamePanel extends JPanel implements KeyListener
 	 */
 	public void refresh()
 	{
-		tokenProbability = (int)(Math.random() * 200 +1);
+		tokenProbability = (int)(Math.random()*1700) + 1; // probability of a token spawning
 		Player.refreshBullet(); // refreshes the bullet speed and delay
 
 		requestFocusInWindow();
@@ -184,6 +183,7 @@ final class GamePanel extends JPanel implements KeyListener
 			// Frenzy token
 		if (tokensTmrSwitch[1] == true && tokensTmr[1] > 0)
 			{tokensTmr[1]--;} // decrementing the timer
+
 		else if (tokensTmr[1] == 0)
 		{
 			tokensTmr[1] = 1000; // reseting the timer to 10 secs
@@ -201,40 +201,18 @@ final class GamePanel extends JPanel implements KeyListener
 	{
 		// backGround
 		g.setColor(Color.black);
-
-		// healthbars
 		g.fillRect(0,0,600,800);
-		for (int i = 0; i<Player.getHealth(); i++)
-			{g.drawImage(HEALTHBAR, 10+(14*i),735,this);}
 
-		// sheilded mask over healthbars
-		if (Player.isSheilded())
-			{g.drawImage(SHEILDED, -230,660,this);}
 
-		// The player object
-		Player.draw(g);
-
-		/*
 		// TOKENS
-		// 	spawnng
+			// 	SPAWNING
 		if (tokenProbability == 1) {tokens.add(new Token((int)(Math.random()*3 + 1), (int)(Math.random()*560 + 10), 5));}
-		//	drawing
-		for (Token token : tokens)
-		{
-			token.draw(g);
-			// token.moveY(false);
-			if (token.collidePlayer())
-			{
-				token.reward();
-				tokens.remove(token);
-			}
-		}
-		*/
-
-		// handels bullet rewards and removes the token off the screen
+			//	DRAWING AND REWARDS
+			// handels bullet rewards and removes the token off the screen
 		for (Token tkn : tokens)
 		{
 			tkn.draw(g);
+			tkn.moveY();
 			if (tkn.collidePlayer())
 			{
 				switch (tkn.getType())
@@ -251,8 +229,8 @@ final class GamePanel extends JPanel implements KeyListener
 
 					case 3:
 						tkn.rewardFrenzy();
-						tokensTmrSwitch[1] = true;// sets the Frenzy
-												  // timer countdown to start
+						tokensTmrSwitch[1] = true; // sets the Frenzy
+												   // timer countdown to start
 						break;
 
 					default:
@@ -263,6 +241,19 @@ final class GamePanel extends JPanel implements KeyListener
 				tokens.remove(tkn);
 			}
 		}
+
+		g.drawImage(DARKENERGY, 50,50,this);
+		// healthbars
+		for (int i = 0; i<Player.getHealth(); i++)
+			{g.drawImage(HEALTHBAR, 10+(14*i),735,this);}
+
+		// sheilded mask over healthbars
+		if (Player.isSheilded())
+			{g.drawImage(SHEILDED, -230,660,this);}
+
+		// The player object
+		Player.draw(g);
+
 
 		// The player's bullets
 		for (int i = 0; i<playerBullets.size(); i++) {(playerBullets.get(i)).draw(g);}
