@@ -81,6 +81,9 @@ final class GamePanel extends JPanel implements KeyListener
 	private static int[]  tokensTmr = {1000,1000};
 	// boolean list for the previous list to turn in countdown (decrementing)
 	private static boolean[]  tokensTmrSwitch = {false,false};
+	// darkEnergy counters
+	private static int[]  energyTmr = {0,1000};
+
 
 	// probability of a token spawning
 	private int tokenProbability;
@@ -150,15 +153,22 @@ final class GamePanel extends JPanel implements KeyListener
 
 		// firing a bullet
 		if (keys[KeyEvent.VK_SPACE] && Player.getBulletDelayIterator() == 0)
-			{playerBullets.add(new PlayerBullet(PLAYERB, Player.getX()-50, Player.getY()-80));}
-
-		// sheild powerup
-		if (keys[KeyEvent.VK_Z]) {}
-
-		// penetration powerup
-		if (keys[KeyEvent.VK_X]) {}
-
-
+		{
+			if(Player.getBulletDelayInterval() == 12) // making sure we are not in frenzy mode
+			{
+				if (energyTmr[0]<3)
+				{
+					playerBullets.add(new PlayerBullet(PLAYERB, Player.getX()-50, Player.getY()-80));
+					energyTmr[0]++;
+				}
+				else
+				{
+					// energyTmr[0] = 0;
+					if (Player.getdarkEnergy()>0)
+						{Player.setdarkEnergy(Player.getdarkEnergy()-1);}
+				}
+			}
+		}
 
 		// MOVING THE BULLETS
 		for (int i = 0; i<playerBullets.size(); i++)
@@ -203,13 +213,11 @@ final class GamePanel extends JPanel implements KeyListener
 		g.setColor(Color.black);
 		g.fillRect(0,0,600,800);
 
-
 		// TOKENS
 			// 	SPAWNING
 		if (tokenProbability == 1) {tokens.add(new Token((int)(Math.random()*3 + 1), (int)(Math.random()*560 + 10), 5));}
 			//	DRAWING AND REWARDS
-			// handels bullet rewards and removes the token off the screen
-		for (Token tkn : tokens)
+		for (Token tkn : tokens) // handels bullet rewards and removes the token off the screen
 		{
 			tkn.draw(g);
 			tkn.moveY();
@@ -245,18 +253,17 @@ final class GamePanel extends JPanel implements KeyListener
 		// g.drawImage(DARKENERGY, 50,50,this);
 		// healthbars
 		for (int i = 0; i<Player.getHealth(); i++)
-			{g.drawImage(HEALTHBAR, 10+(14*i),735,this);}
+			{g.drawImage(HEALTHBAR, 10+(14*i), 735, this);}
 
 		for (int i = 0; i<Player.getdarkEnergy(); i++)
-			{g.drawImage(DARKENERGY, 580 - (14*i),735,this);}
+			{g.drawImage(DARKENERGY, 580 - (14*i), 735, this);}
 
 		// sheilded mask over healthbars
 		if (Player.isSheilded())
-			{g.drawImage(SHEILDED, -230,660,this);}
+			{g.drawImage(SHEILDED, -230, 660, this);}
 
 		// The player object
 		Player.draw(g);
-
 
 		// The player's bullets
 		for (int i = 0; i<playerBullets.size(); i++) {(playerBullets.get(i)).draw(g);}
