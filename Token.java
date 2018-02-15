@@ -33,22 +33,15 @@ public class Token
 	 */
 	public int getX() {return x;}
 
-    /**
-     * Moves the token horizontaly
-     * @param direction false is left true is right
-     */
-	public void moveX(final boolean direction) {x += direction == false ? -speed : speed;}
-
 	/**
 	 * @return the token's vertical component (Y)
 	 */
 	public int getY() {return y;}
 
     /**
-     * Moves the token vertically
-     * @param direction false is down true is up
+     * Moves the token vertically down
      */
-	public void moveY(final boolean direction) {y += direction == true ? -speed : speed;}
+	public void moveY() {y += speed;}
 
 	/**
 	 * @return the speed
