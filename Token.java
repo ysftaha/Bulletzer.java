@@ -15,7 +15,7 @@ public class Token
     private int x, y;
     private int speed = 6, type;
 	private String[] imageDirs =
-		{"Images/heartTK.png", "Images/sheildTK.png", "Images/bulletTK.png"};
+		{"Images/heartTK.png", "Images/sheildTK.png", "Images/frenzyTK.png"};
 
     public Token(final int type, final int x, final int y)
     {
