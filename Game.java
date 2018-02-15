@@ -78,7 +78,7 @@ final class GamePanel extends JPanel implements KeyListener
 	// arraylist of tokens on screen
 	private static ArrayList<Token> tokens = new ArrayList<Token>();
 	// array of timers for tokens (sheild and frenzy)
-	private static int[]  tokensTmr = {10,10};
+	private static int[]  tokensTmr = {1000,1000};
 	private static boolean[]  tokensTmrSwitch = {false,false};
 
 	// probability of a token spawning
@@ -159,22 +159,37 @@ final class GamePanel extends JPanel implements KeyListener
 		// penetration powerup
 		if (keys[KeyEvent.VK_X]) {}
 
-		// boost powerup
-
-		// shift+arrows
 
 
-
-		// moving bullet after firing
+		// MOVING THE BULLETS
 		for (int i = 0; i<playerBullets.size(); i++)
 		{
 			PlayerBullet bull = playerBullets.get(i);
 			if (bull != null) {bull.moveY(true);}
 		}
 
-		// removing bullets that are out of screen
+		// REMOVING PLAYERBULLETS THAT ARE OUT OF THE SCREEN
 		if (playerBullets.size() != 0)
 			{if ((playerBullets.getFirst()).getY() < -30) {playerBullets.removeFirst();}}
+
+		// TOKEN TIMER LOGIC
+			// Sheild token
+		if (tokensTmrSwitch[0] == true && tokensTmr[0] > 0)
+			{tokensTmr[0]--;} // decrementing the timer
+		else if (tokensTmr[0] == 0)
+		{
+			tokensTmr[0] = 1000; // reseting the timer to 10 secs
+			Player.setSheilded(false); // turning the sheild off
+		}
+			// Frenzy token
+		if (tokensTmrSwitch[1] == true && tokensTmr[1] > 0)
+			{tokensTmr[1]--;} // decrementing the timer
+		else if (tokensTmr[1] == 0)
+		{
+			tokensTmr[1] = 1000; // reseting the timer to 10 secs
+			Player.setBulletDelayInterval(12); // turning the interval back to OG
+		}
+
 	}
 
 	/**
@@ -216,6 +231,7 @@ final class GamePanel extends JPanel implements KeyListener
 		}
 		*/
 
+		// handels bullet rewards and removes the token off the screen
 		for (Token tkn : tokens)
 		{
 			tkn.draw(g);
