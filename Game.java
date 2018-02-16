@@ -89,7 +89,7 @@ final class GamePanel extends JPanel implements KeyListener
 	private static final Image HEALTHBAR = new ImageIcon("Images/healthBar.png").getImage();
 	private static final Image DARKENERGY = new ImageIcon("Images/darkEnergyBar.png").getImage();
 	private static final Image PLAYERB = new ImageIcon("Images/playerBullet.png").getImage();
-	private static final Image SHEILDED = new ImageIcon("Images/sheildHUD.png").getImage();
+	private static final Image EMPOWERED = new ImageIcon("Images/empoweredHUD.png").getImage();
 
 	/**
 	 * CONSTRUCTOR
@@ -246,7 +246,6 @@ final class GamePanel extends JPanel implements KeyListener
 			}
 		}
 
-		// g.drawImage(DARKENERGY, 50,50,this);
 		// healthbars
 		for (int i = 0; i<Player.getHealth(); i++)
 			{g.drawImage(HEALTHBAR, 10+(14*i), 735, this);}
@@ -254,9 +253,13 @@ final class GamePanel extends JPanel implements KeyListener
 		for (int i = 0; i<Player.getdarkEnergy(); i++)
 			{g.drawImage(DARKENERGY, 580 - (14*i), 735, this);}
 
-		// sheilded mask over healthbars
+		// empowered mask over health bars (Sheild active)
 		if (Player.isSheilded())
-			{g.drawImage(SHEILDED, -230, 660, this);}
+			{g.drawImage(EMPOWERED, -230, 660, this);}
+
+		// empowered mask over energy bars (Frenzy active)
+		if (Player.getBulletDelayInterval() == 6)
+			{g.drawImage(EMPOWERED, 380, 660, this);}
 
 		// The player object
 		Player.draw(g);
