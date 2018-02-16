@@ -81,9 +81,6 @@ final class GamePanel extends JPanel implements KeyListener
 	private static int[]  tokensTmr = {1000,1000};
 	// boolean list for the previous list to turn in countdown (decrementing)
 	private static boolean[]  tokensTmrSwitch = {false,false};
-	// darkEnergy counters
-	private static int[]  energyTmr = {0,1000};
-
 
 	// probability of a token spawning
 	private int tokenProbability;
@@ -154,21 +151,20 @@ final class GamePanel extends JPanel implements KeyListener
 		// firing a bullet
 		if (keys[KeyEvent.VK_SPACE] && Player.getBulletDelayIterator() == 0)
 		{
-			if(Player.getBulletDelayInterval() == 12) // making sure we are not in frenzy mode
+			if (Player.getdarkEnergy()>0) // making sure we aren't going to melt the gun
 			{
-				if (energyTmr[0]<3)
+				if(Player.getBulletDelayInterval() == 12) // making sure we are not in frenzy mode
 				{
+					// adds the Playerbullet to the Playerbullets linkedlist to be drawn later
 					playerBullets.add(new PlayerBullet(PLAYERB, Player.getX()-50, Player.getY()-80));
-					energyTmr[0]++;
+					Player.setdarkEnergy(Player.getdarkEnergy()-1); // expends darkenergy to shoot a bullet
 				}
-				else
-				{
-					// energyTmr[0] = 0;
-					if (Player.getdarkEnergy()>0)
-						{Player.setdarkEnergy(Player.getdarkEnergy()-1);}
-				}
+				// if in frenzy mode do not expend dark energy
+				else {playerBullets.add(new PlayerBullet(PLAYERB, Player.getX()-50, Player.getY()-80));}
 			}
 		}
+		// if we are not pressing space we regenerate dark energy by 0.01 per refresh
+		if (!keys[KeyEvent.VK_SPACE] && Player.getdarkEnergy() < 10) {Player.setdarkEnergy(Player.getdarkEnergy()+0.01);}
 
 		// MOVING THE BULLETS
 		for (int i = 0; i<playerBullets.size(); i++)
