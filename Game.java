@@ -22,9 +22,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
+import com.sun.glass.ui.EventLoop.State;
+
 // TODO add alien objects
 public final class Game extends JFrame implements ActionListener
 {
+	// dont worry about this for now (editor yelling at me for it)
 	private static final long serialVersionUID = 1L;
 
 	private final Timer CLOCK = new Timer(10, this); // listens to actions every 10 ms
@@ -55,7 +58,7 @@ public final class Game extends JFrame implements ActionListener
 	public void actionPerformed(final ActionEvent evt)
 	{
 		// refreshes only if gamepanel is done initializing
-		if(GAMEPANEL != null) {GAMEPANEL.refresh(); GAMEPANEL.repaint();}
+		if(GAMEPANEL != null) {GAMEPANEL.update(); GAMEPANEL.repaint();}
 	}
 
 	/**
@@ -68,9 +71,13 @@ public final class Game extends JFrame implements ActionListener
 
 final class GamePanel extends JPanel implements KeyListener
 {
-	// dont worry about this for now
+	// dont worry about this for now (editor yelling at me for it)
 	private static final long serialVersionUID = 1L;
 
+	// gameState possible values
+	public enum State {MAINMENU, INGAME, PAUSE, GAMEOVER;}
+	// gameState signaling what part of the GUI we are in
+	private static State gameState;
 	// boolean array of the keys
 	private static boolean[] keys = new boolean[KeyEvent.KEY_LAST+1];
 	//arraylist of player bullets on screen
@@ -81,7 +88,6 @@ final class GamePanel extends JPanel implements KeyListener
 	private static int[]  tokensTmr = {1000,1000};
 	// boolean list for the previous list to turn in countdown (decrementing)
 	private static boolean[]  tokensTmrSwitch = {false,false};
-
 	// probability of a token spawning
 	private int tokenProbability;
 
@@ -98,6 +104,7 @@ final class GamePanel extends JPanel implements KeyListener
 	{
 		setSize(600,800);
 		addKeyListener(this);
+		gameState = State.INGAME;
 	}
 
 	/**
@@ -130,10 +137,44 @@ final class GamePanel extends JPanel implements KeyListener
 
 	/**
 	 * invoked whenever an action
-	 * is performed to refresh the
+	 * is performed to update the
 	 * actions and the game state.
 	 */
-	public void refresh()
+	public void update()
+	{
+		switch (gameState)
+		{
+			case MAINMENU:
+				mainMenu();
+				break;
+
+			case INGAME:
+			    inGame();
+				break;
+
+			case PAUSE:
+				pause();
+				break;
+
+			case GAMEOVER:
+				gameOver();
+				break;
+		}
+	}
+
+	/**
+	 * refreshes the frames
+	 * to simulate a main menue
+	 */
+	public void mainMenu() {}
+	public void paintMainMenu(Graphics g) {}
+
+	/**
+	 * refreshes the frames
+	 * to simulate playing
+	 * the game
+	 */
+	public void inGame()
 	{
 		tokenProbability = (int)(Math.random()*1700) + 1; // probability of a token spawning
 		Player.refreshBullet(); // refreshes the bullet speed and delay
@@ -151,7 +192,7 @@ final class GamePanel extends JPanel implements KeyListener
 		// firing a bullet
 		if (keys[KeyEvent.VK_SPACE] && Player.getBulletDelayIterator() == 0)
 		{
-			if (Player.getdarkEnergy()>0) // making sure we aren't going to melt the gun
+			if (Player.getdarkEnergy() > 0) // making sure we aren't going to melt the gun
 			{
 				if(Player.getBulletDelayInterval() == 12) // making sure we are not in frenzy mode
 				{
@@ -195,20 +236,16 @@ final class GamePanel extends JPanel implements KeyListener
 			tokensTmr[1] = 1000; // reseting the timer to 10 secs
 			Player.setBulletDelayInterval(12); // turning the interval back to OG
 		}
-
 	}
 
 	/**
-	 * draws to graphic component
+	 * Painting ingame objects
+	 * and asthetics on the screen
 	 * @param g the graphics component
+	 * to paint to
 	 */
-	@Override
-    public void paintComponent(final Graphics g)
+	public void paintInGame(Graphics g)
 	{
-		// backGround
-		g.setColor(Color.black);
-		g.fillRect(0,0,600,800);
-
 		// TOKENS
 			// 	SPAWNING
 		if (tokenProbability == 1) {tokens.add(new Token((int)(Math.random()*3 + 1), (int)(Math.random()*560 + 10), 5));}
@@ -266,5 +303,58 @@ final class GamePanel extends JPanel implements KeyListener
 
 		// The player's bullets
 		for (int i = 0; i<playerBullets.size(); i++) {(playerBullets.get(i)).draw(g);}
-    }
+	}
+
+	/**
+	 * refreshes the frames
+	 * to simulate a pause
+	 * menu
+	 */
+	public void pause() {}
+	public void paintPause(Graphics g) {}
+
+	/**
+	 * refreshes the frames
+	 * to simulate a talent
+	 * crisis
+	 */
+	public void gameOver() {}
+	public void paintGameOver(Graphics g) {}
+
+	/**
+	 * draws to graphic component
+	 * @param g the graphics component
+	 * depending on waht gamestate we
+	 * are in
+	 * @see #paintMainMenu(Graphics)
+	 * @see #paintInGame(Graphics)
+	 * @see #paintPause(Graphics)
+	 * @see #paintGameOver(Graphics)
+	 */
+	@Override
+    public void paintComponent(final Graphics g)
+	{
+		// backGround
+		g.setColor(Color.black);
+		g.fillRect(0,0,600,800);
+
+		switch (gameState)
+		{
+			case MAINMENU:
+				paintMainMenu(g);
+				break;
+
+			case INGAME:
+				paintInGame(g);
+				break;
+
+			case PAUSE:
+				paintPause(g);
+				break;
+
+			case GAMEOVER:
+				paintGameOver(g);
+				break;
+		}
+	}
 }
