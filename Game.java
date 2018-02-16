@@ -89,13 +89,23 @@ final class GamePanel extends JPanel implements KeyListener
 	// boolean list for the previous list to turn in countdown (decrementing)
 	private static boolean[]  tokensTmrSwitch = {false,false};
 	// probability of a token spawning
-	private int tokenProbability;
+	private static int tokenProbability;
+	// goes from 0 to 2 where 0 = play, 1 = instructions, 2 = about
+	private static int menuState = 0;
 
 	// Images
+		// INGAME Imgaes
 	private static final Image HEALTHBAR = new ImageIcon("Images/healthBar.png").getImage();
 	private static final Image DARKENERGY = new ImageIcon("Images/darkEnergyBar.png").getImage();
 	private static final Image PLAYERB = new ImageIcon("Images/playerBullet.png").getImage();
 	private static final Image EMPOWERED = new ImageIcon("Images/empoweredHUD.png").getImage();
+		// MAINMENU Images
+	private static final Image LOGO = new ImageIcon("Images/BulletzerLogo.png").getImage();
+	private static final Image MENU1 = new ImageIcon("Images/menu1.png").getImage();
+	private static final Image MENU2 = new ImageIcon("Images/menu2.png").getImage();
+	private static final Image MENU3 = new ImageIcon("Images/menu3.png").getImage();
+	private static final Image LICENSE = new ImageIcon("Images/license.png").getImage();
+
 
 	/**
 	 * CONSTRUCTOR
@@ -104,7 +114,7 @@ final class GamePanel extends JPanel implements KeyListener
 	{
 		setSize(600,800);
 		addKeyListener(this);
-		gameState = State.INGAME;
+		gameState = State.MAINMENU;
 	}
 
 	/**
@@ -147,17 +157,17 @@ final class GamePanel extends JPanel implements KeyListener
 			case MAINMENU:
 				mainMenu();
 				break;
-
 			case INGAME:
 			    inGame();
 				break;
-
 			case PAUSE:
 				pause();
 				break;
-
 			case GAMEOVER:
 				gameOver();
+				break;
+			default:
+				System.out.println("Run Function Error.");
 				break;
 		}
 	}
@@ -166,8 +176,34 @@ final class GamePanel extends JPanel implements KeyListener
 	 * refreshes the frames
 	 * to simulate a main menue
 	 */
-	public void mainMenu() {}
-	public void paintMainMenu(Graphics g) {}
+	public void mainMenu()
+	{
+		requestFocusInWindow();
+		if (keys[KeyEvent.VK_UP])
+		{
+		}
+
+		if (keys[KeyEvent.VK_DOWN])
+		{
+		}
+	}
+	public void paintMainMenu(Graphics g)
+	{
+		g.drawImage(LOGO, 100,200,this);
+		g.drawImage(LICENSE, 145,720,this);
+		switch (menuState)
+		{
+			case 0:
+				g.drawImage(MENU1, 50,300,this);
+				break;
+			case 1:
+				g.drawImage(MENU2, 50,311,this);
+				break;
+			case 2:
+				g.drawImage(MENU3, 50,320,this);
+				break;
+		}
+	}
 
 	/**
 	 * refreshes the frames
@@ -261,21 +297,18 @@ final class GamePanel extends JPanel implements KeyListener
 					case 1:
 						tkn.rewardHealth();
 						break;
-
 					case 2:
 						tkn.rewardSheild();
 						tokensTmrSwitch[0] = true; // sets the sheilded
 												   // timer countdown to start
 						break;
-
 					case 3:
 						tkn.rewardFrenzy();
 						tokensTmrSwitch[1] = true; // sets the Frenzy
 												   // timer countdown to start
 						break;
-
 					default:
-						System.out.println("Token type Error!");
+						System.out.println("Token type Error.");
 						break;
 				}
 
@@ -331,6 +364,7 @@ final class GamePanel extends JPanel implements KeyListener
 	 * @see #paintPause(Graphics)
 	 * @see #paintGameOver(Graphics)
 	 */
+
 	@Override
     public void paintComponent(final Graphics g)
 	{
@@ -343,17 +377,17 @@ final class GamePanel extends JPanel implements KeyListener
 			case MAINMENU:
 				paintMainMenu(g);
 				break;
-
 			case INGAME:
 				paintInGame(g);
 				break;
-
 			case PAUSE:
 				paintPause(g);
 				break;
-
 			case GAMEOVER:
 				paintGameOver(g);
+				break;
+			default:
+				System.out.println("Paint Function Error.");
 				break;
 		}
 	}
