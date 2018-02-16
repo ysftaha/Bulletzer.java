@@ -92,6 +92,7 @@ final class GamePanel extends JPanel implements KeyListener
 	private static int tokenProbability;
 	// goes from 0 to 2 where 0 = play, 1 = instructions, 2 = about
 	private static int menuState = 0;
+	private static int menuStateCounter = 0;
 
 	// Images
 		// INGAME Imgaes
@@ -179,13 +180,14 @@ final class GamePanel extends JPanel implements KeyListener
 	public void mainMenu()
 	{
 		requestFocusInWindow();
-		if (keys[KeyEvent.VK_UP])
-		{
-		}
+		// determines the state based on a range because computers are too fast
+		if (keys[KeyEvent.VK_UP]  && menuStateCounter>0) {menuStateCounter--;}
+		if (keys[KeyEvent.VK_DOWN] && menuStateCounter<20) {menuStateCounter++;}
+		if (menuStateCounter == 0) {menuState = 0;}
+		else if (menuStateCounter <10) {menuState = 1;}
+		else if (menuStateCounter >10) {menuState = 2;}
 
-		if (keys[KeyEvent.VK_DOWN])
-		{
-		}
+		if (keys[KeyEvent.VK_ENTER] && menuState == 0) {gameState = State.INGAME;}
 	}
 	public void paintMainMenu(Graphics g)
 	{
@@ -200,7 +202,7 @@ final class GamePanel extends JPanel implements KeyListener
 				g.drawImage(MENU2, 50,311,this);
 				break;
 			case 2:
-				g.drawImage(MENU3, 50,320,this);
+				g.drawImage(MENU3, 50,322,this);
 				break;
 		}
 	}
@@ -212,6 +214,7 @@ final class GamePanel extends JPanel implements KeyListener
 	 */
 	public void inGame()
 	{
+		requestFocusInWindow();
 		tokenProbability = (int)(Math.random()*1700) + 1; // probability of a token spawning
 		Player.refreshBullet(); // refreshes the bullet speed and delay
 
