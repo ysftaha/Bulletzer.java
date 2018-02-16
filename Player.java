@@ -21,7 +21,7 @@ public final class Player
     // ACESSABLE
 	private static int x = 275, y = 680; // middle of the screen above the hud starting point
 	private static int health = 5, speed  = 7;
-	private static int darkEnergy = 6;
+	private static double darkEnergy = 10;
     private static boolean sheilded = false;
 	private static int bulletDelayInterval = 12; // the interval to wait between bullets
 	private static int bulletDelayIterator = 0;  // decrements by one from
@@ -78,12 +78,12 @@ public final class Player
 	/**
 	 * @return the energy
 	 */
-	public static int getdarkEnergy() {return darkEnergy;}
+	public static double getdarkEnergy() {return darkEnergy;}
 
 	/**
 	 * @param darkEnergy the darkEnergy to set
 	 */
-	public static void setdarkEnergy(int darkEnergy) {Player.darkEnergy = darkEnergy;}
+	public static void setdarkEnergy(double darkEnergy) {Player.darkEnergy = darkEnergy;}
 
 	/**
 	 * @return the sheilded
