@@ -18,20 +18,22 @@ import java.awt.Graphics;
 import java.awt.Color;
 
 import javax.swing.JPanel;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
-import com.sun.glass.ui.EventLoop.State;
-
-// TODO add alien objects
 public final class Game extends JFrame implements ActionListener
 {
 	// dont worry about this for now (editor yelling at me for it)
 	private static final long serialVersionUID = 1L;
 
-	private final Timer CLOCK = new Timer(10, this); // listens to actions every 10 ms
-	private final GamePanel GAMEPANEL; // a gamepanel that controls the player component
+	// listens to actions every 10 ms
+	private final Timer CLOCK = new Timer(10, this);
+	// a gamepanel that controls the player component
+	private final GamePanel GAMEPANEL;
 
 	/**
 	 * CONSTRUCTOR
@@ -93,13 +95,17 @@ final class GamePanel extends JPanel implements KeyListener
 	// goes from 0 to 2 where 0 = play, 1 = instructions, 2 = about
 	private static int menuState = 0;
 	private static int menuStateCounter = 0;
+	// escape for pausing the game counter
+	private static int pauseCounter = 10;
+
 
 	// Images
 		// INGAME Imgaes
 	private static final Image HEALTHBAR = new ImageIcon("Images/healthBar.png").getImage();
 	private static final Image DARKENERGY = new ImageIcon("Images/darkEnergyBar.png").getImage();
 	private static final Image PLAYERB = new ImageIcon("Images/playerBullet.png").getImage();
-	private static final Image EMPOWERED = new ImageIcon("Images/empoweredHUD.png").getImage();
+	private static final Image SHIELDEM = new ImageIcon("Images/SheildEm.png").getImage();
+	private static final Image FRENZYEM = new ImageIcon("Images/FrenzyEm.png").getImage();
 		// MAINMENU Images
 	private static final Image LOGO = new ImageIcon("Images/BulletzerLogo.png").getImage();
 	private static final Image MENU1 = new ImageIcon("Images/menu1.png").getImage();
@@ -215,18 +221,22 @@ final class GamePanel extends JPanel implements KeyListener
 	public void inGame()
 	{
 		requestFocusInWindow();
+		if (Player.getHealth() == 0) {gameState = State.GAMEOVER;}
 		tokenProbability = (int)(Math.random()*1700) + 1; // probability of a token spawning
 		Player.refreshBullet(); // refreshes the bullet speed and delay
-
-		requestFocusInWindow();
 
 		// X movement
 		if (keys[KeyEvent.VK_RIGHT] && Player.getX()<545) {Player.moveX(true);}
 		if (keys[KeyEvent.VK_LEFT] && Player.getX()>5) 	 {Player.moveX(false);}
 
+
 		// Y movement
 		if (keys[KeyEvent.VK_DOWN] && Player.getY()<680) {Player.moveY(false);}
 		if (keys[KeyEvent.VK_UP] && Player.getY()>5) {Player.moveY(true);}
+
+		// Pause menue
+		if (keys[KeyEvent.VK_ESCAPE] && pauseCounter>0) {pauseCounter--;}
+		if (pauseCounter == 0) {gameState = State.PAUSE;}
 
 		// firing a bullet
 		if (keys[KeyEvent.VK_SPACE] && Player.getBulletDelayIterator() == 0)
@@ -244,7 +254,8 @@ final class GamePanel extends JPanel implements KeyListener
 			}
 		}
 		// if we are not pressing space we regenerate dark energy by 0.01 per refresh
-		if (!keys[KeyEvent.VK_SPACE] && Player.getdarkEnergy() < 10) {Player.setdarkEnergy(Player.getdarkEnergy()+0.01);}
+		if (!keys[KeyEvent.VK_SPACE] && Player.getdarkEnergy() < 10)
+			{Player.setdarkEnergy(Player.getdarkEnergy()+0.01);}
 
 		// MOVING THE BULLETS
 		for (int i = 0; i<playerBullets.size(); i++)
@@ -287,7 +298,8 @@ final class GamePanel extends JPanel implements KeyListener
 	{
 		// TOKENS
 			// 	SPAWNING
-		if (tokenProbability == 1) {tokens.add(new Token((int)(Math.random()*3 + 1), (int)(Math.random()*560 + 10), 5));}
+		if (tokenProbability == 1)
+			{tokens.add(new Token((int)(Math.random()*3 + 1), (int)(Math.random()*560 + 10), 5));}
 			//	DRAWING AND REWARDS
 		for (Token tkn : tokens) // handels bullet rewards and removes the token off the screen
 		{
@@ -328,11 +340,11 @@ final class GamePanel extends JPanel implements KeyListener
 
 		// empowered mask over health bars (Sheild active)
 		if (Player.isSheilded())
-			{g.drawImage(EMPOWERED, -230, 660, this);}
+			{g.drawImage(SHIELDEM, Player.getX()-12, Player.getY()-7, this);}
 
 		// empowered mask over energy bars (Frenzy active)
 		if (Player.getBulletDelayInterval() == 6)
-			{g.drawImage(EMPOWERED, 380, 660, this);}
+			{g.drawImage(FRENZYEM, Player.getX()+6, Player.getY()-22, this);}
 
 		// The player object
 		Player.draw(g);
@@ -346,7 +358,16 @@ final class GamePanel extends JPanel implements KeyListener
 	 * to simulate a pause
 	 * menu
 	 */
-	public void pause() {}
+	public void pause()
+	{
+		requestFocusInWindow();
+		if (keys[KeyEvent.VK_ESCAPE] && pauseCounter < 11) {pauseCounter++;}
+		if (pauseCounter == 11)
+		{
+			gameState = State.INGAME;
+			pauseCounter = 10;
+		}
+	}
 	public void paintPause(Graphics g) {}
 
 	/**
