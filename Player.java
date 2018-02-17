@@ -17,8 +17,6 @@ public final class Player
     private final static Image PLAYERIMG = new ImageIcon("Images/playerShip.png").getImage();
 
     // player object feilds {•̃_•̃}
-
-    // ACESSABLE
 	private static int x = 275, y = 680; // middle of the screen above the hud starting point
 	private static int health = 5, speed  = 7;
 	private static double darkEnergy = 10;
