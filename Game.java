@@ -18,9 +18,6 @@ import java.awt.Graphics;
 import java.awt.Color;
 
 import javax.swing.JPanel;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.Timer;
@@ -112,6 +109,7 @@ final class GamePanel extends JPanel implements KeyListener
 	private static final Image MENU2 = new ImageIcon("Images/menu2.png").getImage();
 	private static final Image MENU3 = new ImageIcon("Images/menu3.png").getImage();
 	private static final Image LICENSE = new ImageIcon("Images/license.png").getImage();
+	private static final Sound sound   = new Sound();
 
 
 	/**
