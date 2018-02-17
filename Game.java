@@ -74,7 +74,7 @@ final class GamePanel extends JPanel implements KeyListener
 	private static final long serialVersionUID = 1L;
 
 	// gameState possible values
-	public enum State {MAINMENU, INGAME, PAUSE, GAMEOVER;}
+	public enum State {MAINMENU, INSTRUCTIONS, ABOUT, INGAME, PAUSE, GAMEOVER;}
 	// gameState signaling what part of the GUI we are in
 	private static State gameState;
 	// boolean array of the keys
@@ -91,9 +91,6 @@ final class GamePanel extends JPanel implements KeyListener
 	private static int tokenProbability;
 	// goes from 0 to 2 where 0 = play, 1 = instructions, 2 = about
 	private static int menuState = 0;
-	private static int menuStateCounter = 0;
-	// escape for pausing the game counter
-	private static int pauseCounter = 10;
 
 
 	// Images
@@ -139,16 +136,77 @@ final class GamePanel extends JPanel implements KeyListener
     public void keyTyped(final KeyEvent keyevt) {}
 
 	/**
-	 * invoked when a key is pressed
-	 * @param keyevt : a KeyEvent that occured
-	 */
-    public void keyPressed(final KeyEvent keyevt) {setKey(keyevt.getKeyCode(),true);}
-
-	/**
 	 * invoked when a key is released
 	 * @param keyevt : a KeyEvent that occured
 	 */
     public void keyReleased(final KeyEvent keyevt) {setKey(keyevt.getKeyCode(),false);}
+
+	/**
+	 * invoked when a key is pressed
+	 * @param keyevt : a KeyEvent that occured
+	 * @see Sound.java
+	 */
+    public void keyPressed(final KeyEvent keyevt)
+	{
+		setKey(keyevt.getKeyCode(),true);
+		int keyCode = keyevt.getKeyCode();
+		if (gameState == State.MAINMENU) // if we are in main menu
+		{
+			if (keyCode == KeyEvent.VK_UP)
+			{
+				switch(menuState)
+				{
+					case 0:
+						menuState = 2;
+						break;
+					case 1:
+						menuState = 0;
+						break;
+					case 2:
+						menuState = 1;
+						break;
+				}
+				sound.playSound("button");
+			}
+			if (keyCode == KeyEvent.VK_DOWN)
+			{
+				switch(menuState)
+				{
+					case 0:
+						menuState = 1;
+						break;
+					case 1:
+						menuState = 2;
+						break;
+					case 2:
+						menuState = 0;
+						break;
+				}
+				sound.playSound("button");
+			}
+
+			if (keyCode == KeyEvent.VK_ENTER)
+			{
+				switch(menuState)
+				{
+					case 0:
+						gameState = State.INGAME;
+						break;
+					case 1:
+						gameState = State.INSTRUCTIONS;
+						break;
+					case 2:
+						gameState = State.ABOUT;
+						break;
+				}
+			}
+		}
+		else if (gameState == State.INGAME) // Enter Pause menue
+			{if (keyCode == KeyEvent.VK_ESCAPE) {gameState = State.PAUSE;}}
+
+		else if (gameState == State.PAUSE) // Exit Pause menue
+			{if (keyCode == KeyEvent.VK_ESCAPE) {gameState = State.INGAME;}}
+	}
 
 	/**
 	 * invoked whenever an action
@@ -172,28 +230,24 @@ final class GamePanel extends JPanel implements KeyListener
 				gameOver();
 				break;
 			default:
-				System.out.println("Run Function Error.");
+				System.out.println("Game state Error.");
 				break;
 		}
 	}
 
 	/**
 	 * refreshes the frames
-	 * to simulate a main menue
+	 * to draw the  main menue
 	 */
-	public void mainMenu()
-	{
-		requestFocusInWindow();
-		// determines the state based on a range because computers are too fast
-		if (keys[KeyEvent.VK_UP]  && menuStateCounter>0) {menuStateCounter--;}
-		if (keys[KeyEvent.VK_DOWN] && menuStateCounter<20) {menuStateCounter++;}
-		if (menuStateCounter == 0) {menuState = 0;}
-		else if (menuStateCounter <10) {menuState = 1;}
-		else if (menuStateCounter >10) {menuState = 2;}
+	public void mainMenu() {requestFocusInWindow();}
 
-		if (keys[KeyEvent.VK_ENTER] && menuState == 0) {gameState = State.INGAME;}
-	}
-	public void paintMainMenu(Graphics g)
+	/**
+	 * draws the diffrent images
+	 * in the main menu
+	 * @param g the graphics component
+	 * the function is drawing to
+	 */
+	public void paintMainMenu(final Graphics g)
 	{
 		g.drawImage(LOGO, 100,200,this);
 		g.drawImage(LICENSE, 145,720,this);
@@ -231,10 +285,6 @@ final class GamePanel extends JPanel implements KeyListener
 		// Y movement
 		if (keys[KeyEvent.VK_DOWN] && Player.getY()<680) {Player.moveY(false);}
 		if (keys[KeyEvent.VK_UP] && Player.getY()>5) {Player.moveY(true);}
-
-		// Pause menue
-		if (keys[KeyEvent.VK_ESCAPE] && pauseCounter>0) {pauseCounter--;}
-		if (pauseCounter == 0) {gameState = State.PAUSE;}
 
 		// firing a bullet
 		if (keys[KeyEvent.VK_SPACE] && Player.getBulletDelayIterator() == 0)
@@ -284,6 +334,8 @@ final class GamePanel extends JPanel implements KeyListener
 			tokensTmr[1] = 1000; // reseting the timer to 10 secs
 			Player.setBulletDelayInterval(12); // turning the interval back to OG
 		}
+
+		// ENEMY HANDELING AND LOGIC
 	}
 
 	/**
@@ -292,7 +344,7 @@ final class GamePanel extends JPanel implements KeyListener
 	 * @param g the graphics component
 	 * to paint to
 	 */
-	public void paintInGame(Graphics g)
+	public void paintInGame(final Graphics g)
 	{
 		// TOKENS
 			// 	SPAWNING
@@ -356,17 +408,8 @@ final class GamePanel extends JPanel implements KeyListener
 	 * to simulate a pause
 	 * menu
 	 */
-	public void pause()
-	{
-		requestFocusInWindow();
-		if (keys[KeyEvent.VK_ESCAPE] && pauseCounter < 11) {pauseCounter++;}
-		if (pauseCounter == 11)
-		{
-			gameState = State.INGAME;
-			pauseCounter = 10;
-		}
-	}
-	public void paintPause(Graphics g) {}
+	public void pause() {requestFocusInWindow();}
+	public void paintPause(final Graphics g) {}
 
 	/**
 	 * refreshes the frames
@@ -374,7 +417,7 @@ final class GamePanel extends JPanel implements KeyListener
 	 * crisis
 	 */
 	public void gameOver() {}
-	public void paintGameOver(Graphics g) {}
+	public void paintGameOver(final Graphics g) {}
 
 	/**
 	 * draws to graphic component
