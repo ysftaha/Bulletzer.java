@@ -82,7 +82,7 @@ final class GamePanel extends JPanel implements KeyListener
 	// boolean array of the keys
 	private static boolean[] keys = new boolean[KeyEvent.KEY_LAST+1];
 	//arraylist of player bullets on screen
-	private static LinkedList<PlayerBullet> playerBullets = new LinkedList<PlayerBullet>();
+	private static LinkedList<Bullet> playerBullets = new LinkedList<Bullet>();
 	// arraylist of tokens on screen
 	private static ArrayList<Token> tokens = new ArrayList<Token>();
 	// array of timers for tokens (sheild and frenzy)
@@ -314,11 +314,11 @@ final class GamePanel extends JPanel implements KeyListener
 				if(Player.getBulletDelayInterval() == 12) // making sure we are not in frenzy mode
 				{
 					// adds the Playerbullet to the Playerbullets linkedlist to be drawn later
-					playerBullets.add(new PlayerBullet(PLAYERB, Player.getX()-50, Player.getY()-80));
+					playerBullets.add(new Bullet(PLAYERB, Player.getX()-50, Player.getY()-80));
 					Player.setdarkEnergy(Player.getdarkEnergy()-1); // expends darkenergy to shoot a bullet
 				}
 				// if in frenzy mode do not expend dark energy
-				else {playerBullets.add(new PlayerBullet(PLAYERB, Player.getX()-50, Player.getY()-80));}
+				else {playerBullets.add(new Bullet(PLAYERB, Player.getX()-50, Player.getY()-80));}
 			}
 		}
 		// if we are not pressing space we regenerate dark energy by 0.01 per refresh
@@ -328,7 +328,7 @@ final class GamePanel extends JPanel implements KeyListener
 		// MOVING THE BULLETS
 		for (int i = 0; i<playerBullets.size(); i++)
 		{
-			PlayerBullet bull = playerBullets.get(i);
+			Bullet bull = playerBullets.get(i);
 			if (bull != null) {bull.moveY(true);}
 		}
 
