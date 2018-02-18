@@ -22,6 +22,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
+// @SuppressWarnings("all")
 public final class Game extends JFrame implements ActionListener
 {
 	// dont worry about this for now (editor yelling at me for it)
@@ -68,6 +69,7 @@ public final class Game extends JFrame implements ActionListener
     public static void main(final String...arguments) {new Game();}
 }
 
+// @SuppressWarnings("all")
 final class GamePanel extends JPanel implements KeyListener
 {
 	// dont worry about this for now (editor yelling at me for it)
@@ -89,8 +91,22 @@ final class GamePanel extends JPanel implements KeyListener
 	private static boolean[]  tokensTmrSwitch = {false,false};
 	// probability of a token spawning
 	private static int tokenProbability;
+	// enemy spawning probability
+	private static int enemyProbability;
+	// Enemy objects list
+	private static ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+	static
+	{
+		enemies.add(new Enemy(400, 40, 1, 1));
+		enemies.add(new Enemy(40, 20, 1, 2));
+		enemies.add(new Enemy(40, 40, 1, 3));
+	}
 	// goes from 0 to 2 where 0 = play, 1 = instructions, 2 = about
 	private static int menuState = 0;
+	// used for the second enemy movment
+	private static boolean hitEdge = false;
+	// used for the third enemy movement ;)
+	// private static int spaceTime = 0;
 
 
 	// Images
@@ -107,6 +123,8 @@ final class GamePanel extends JPanel implements KeyListener
 	private static final Image MENU3 = new ImageIcon("Images/menu3.png").getImage();
 	private static final Image LICENSE = new ImageIcon("Images/license.png").getImage();
 	private static final Sound sound   = new Sound();
+
+
 
 
 	/**
@@ -273,8 +291,10 @@ final class GamePanel extends JPanel implements KeyListener
 	public void inGame()
 	{
 		requestFocusInWindow();
-		if (Player.getHealth() == 0) {gameState = State.GAMEOVER;}
 		tokenProbability = (int)(Math.random()*1700) + 1; // probability of a token spawning
+		enemyProbability = (int)(Math.random()*200) + 1; // probability of a enemy spawning
+
+		if (Player.getHealth() == 0) {gameState = State.GAMEOVER;}
 		Player.refreshBullet(); // refreshes the bullet speed and delay
 
 		// X movement
@@ -334,8 +354,53 @@ final class GamePanel extends JPanel implements KeyListener
 			tokensTmr[1] = 1000; // reseting the timer to 10 secs
 			Player.setBulletDelayInterval(12); // turning the interval back to OG
 		}
-
 		// ENEMY HANDELING AND LOGIC
+		for (Enemy enm: enemies)
+		{
+			// moving enemies
+			switch (enm.getType())
+			{
+				case 1:
+					if (!enm.isHitEdge())
+					{
+						enm.setY(enm.getY() + enm.getSpeed());
+						enm.setX(enm.getX() + enm.getSpeed());
+						if (enm.getX() > 540) {enm.setHitEdge(true);}
+					}
+					else if (enm.isHitEdge())
+					{
+						enm.setY(enm.getY() + enm.getSpeed());
+						enm.setX(enm.getX() - enm.getSpeed());
+						if (enm.getX() < 0) {enm.setHitEdge(false);}
+					}
+					break;
+				case 2:
+					enm.setY(enm.getY()+1);
+					break;
+				case 3:
+					if (enm.getSpaceTime()<120)
+					{
+						enm.setY(enm.getY()+1);
+						enm.setSpaceTime(enm.getSpaceTime()+1);
+					}
+					else
+					{
+						enm.setTimeIsHoax(enm.getTimeIsHoax()+1);
+						if (enm.getTimeIsHoax() == 120)
+						{
+							enm.setSpaceTime(0);
+							enm.setTimeIsHoax(0);
+						}
+					}
+					break;
+			}
+		}
+
+		// TOKENS
+			// 	SPAWNING
+		// handeling logic other than spawning in paintInGame
+		if (tokenProbability == 1)
+			{tokens.add(new Token((int)(Math.random()*3 + 1), (int)(Math.random()*560 + 10), 5));}
 	}
 
 	/**
@@ -346,13 +411,15 @@ final class GamePanel extends JPanel implements KeyListener
 	 */
 	public void paintInGame(final Graphics g)
 	{
+
+
 		// TOKENS
-			// 	SPAWNING
-		if (tokenProbability == 1)
-			{tokens.add(new Token((int)(Math.random()*3 + 1), (int)(Math.random()*560 + 10), 5));}
-			//	DRAWING AND REWARDS
-		for (Token tkn : tokens) // handels bullet rewards and removes the token off the screen
+			// Token DRAWING AND REWARDS
+		// handels bullet rewards and removes the token off the screen
+		// decrementing to avoid ConcurrentModificationException
+		for (int i = tokens.size()-1; i>-1; i--)
 		{
+			Token tkn = tokens.get(i);
 			tkn.draw(g);
 			tkn.moveY();
 			if (tkn.collidePlayer())
@@ -380,6 +447,8 @@ final class GamePanel extends JPanel implements KeyListener
 				tokens.remove(tkn);
 			}
 		}
+		// ENEMIES
+		for (Enemy enm: enemies) {enm.draw(g);}
 
 		// healthbars
 		for (int i = 0; i<Player.getHealth(); i++)
@@ -388,11 +457,11 @@ final class GamePanel extends JPanel implements KeyListener
 		for (int i = 0; i<Player.getdarkEnergy(); i++)
 			{g.drawImage(DARKENERGY, 580 - (14*i), 735, this);}
 
-		// empowered mask over health bars (Sheild active)
+		// empowered sprite around Player sprite (Sheild active)
 		if (Player.isSheilded())
 			{g.drawImage(SHIELDEM, Player.getX()-12, Player.getY()-7, this);}
 
-		// empowered mask over energy bars (Frenzy active)
+		// empowered sprite above Player sprite (Frenzy active)
 		if (Player.getBulletDelayInterval() == 6)
 			{g.drawImage(FRENZYEM, Player.getX()+6, Player.getY()-22, this);}
 
