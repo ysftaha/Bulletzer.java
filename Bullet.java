@@ -18,21 +18,36 @@ public class Bullet
 	private double x, y;      // the coordinates of the bullet
     private double dx, dy;
 	private Image img;        // the bullet sprite
+	private int type;
     private double speed = 9;
     private double radians;
 
     /**
      * CONSTRUCTOR
-     * @param x : the horizontal
+	 * @param type 1 is player
+	 * bullet. 2 is enemy bullet
+     * @param x the horizontal
      * coordinate of the bullet
-     * @param y : the vertical
+     * @param y the vertical
      * coordinate of the bullet
+	 * @param angle the angle for
+	 * which to calculate the bullet's
+	 * movement
      */
-	public Bullet(final Image img, final double x, final double y, final double angle)
+	public Bullet(final int type, final double x, final double y, final double angle)
     {
 		this.x = x;
 		this.y = y;
-		this.img = img;
+
+		switch(type)
+		{
+			case 1:
+				img = new ImageIcon("Images/playerBullet.png").getImage();
+				break;
+			case 2:
+				img = new ImageIcon("Images/enemyBullet.png").getImage();
+				break;
+		}
 
 		radians = Math.toRadians(angle);
 
@@ -107,6 +122,16 @@ public class Bullet
 	 */
 	public void setDy(double dy) {this.dy = dy;}
 
+	/**
+	 * @return the type
+	 */
+	public int getType() {return type;}
+
+	/**
+	 * @param type the type to set
+	 */
+	public void setType(int type) {this.type = type;}
+
 	//////////////////////
     //  OTHER FUNCTIONS //
     //////////////////////
@@ -118,7 +143,6 @@ public class Bullet
      */
 	public void draw(final Graphics g)
         {g.drawImage(img, (int)getX(), (int)getY(), null);}
-
 
     /**
      * Checks if the bullet collided
