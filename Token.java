@@ -9,7 +9,7 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
-public class Token
+public final class Token
 {
 
     private int x, y;
