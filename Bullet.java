@@ -9,14 +9,17 @@
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
 public class Bullet
 {
-	private int x, y;      // the coordinates of the bullet
-	private Image img;     // the bullet sprite
-    private int speed = 9; // the bullet's speed
+	private double x, y;      // the coordinates of the bullet
+    private double dx, dy;
+	private Image img;        // the bullet sprite
+    private double speed = 9;
+    private double radians;
 
     /**
      * CONSTRUCTOR
@@ -25,11 +28,16 @@ public class Bullet
      * @param y : the vertical
      * coordinate of the bullet
      */
-	public Bullet(final Image img, final int x, final int y)
+	public Bullet(final Image img, final double x, final double y, final double angle)
     {
 		this.x = x;
 		this.y = y;
 		this.img = img;
+
+		radians = Math.toRadians(angle);
+
+		dx = Math.cos(radians) * speed;
+		dy = Math.sin(radians) * speed;
 	}
 
     ///////////////////////
@@ -39,7 +47,7 @@ public class Bullet
     /**
      * @return the Bullet's horizontal component (X)
      */
-    public int getX() {return x;}
+    public double getX() {return x;}
 
     /**
      * Moves the Bullet horizontaly
@@ -50,13 +58,67 @@ public class Bullet
     /**
      * @return the Bullet's vertical component (Y)
      */
-	public int getY() {return y;}
+	public double getY() {return y;}
 
     /**
      * Moves the Bullet vertically
      * @param direction false is down true is up
      */
 	public void moveY(final boolean direction) {y += direction == true ? -speed : speed;}
+
+	/**
+	 * @return the speed
+	 */
+	public double getspeed() {return speed;}
+
+	/**
+	 * @param speed the speed to set
+	 */
+	public void setspeed(double speed) {this.speed = speed;}
+
+	/**
+	 * @return the radians
+	 */
+	public double getRadians() {return radians;}
+
+	/**
+	 * @param radians the radians to set
+	 */
+	public void setRadians(double radians) {this.radians = radians;}
+
+
+	/**
+	 * @return the dx
+	 */
+	public double getDx() {return dx;}
+
+	/**
+	 * @param dx the dx to set
+	 */
+	public void setDx(double dx) {this.dx = dx;}
+
+	/**
+	 * @return the dy
+	 */
+	public double getDy() {return dy;}
+
+	/**
+	 * @param dy the dy to set
+	 */
+	public void setDy(double dy) {this.dy = dy;}
+
+	//////////////////////
+    //  OTHER FUNCTIONS //
+    //////////////////////
+
+    /**
+     * Draws the bullet object
+     * @param g the graphics
+	 * component we drawing to
+     */
+	public void draw(final Graphics g)
+        {g.drawImage(img, (int)getX(), (int)getY(), null);}
+
 
     /**
      * Checks if the bullet collided
@@ -69,42 +131,24 @@ public class Bullet
     * with the enemy
     */
 
-    /*
 	public boolean collideWith(Enemy enemy)
     {
-		final int ax = enemy.getX(), ay = enemy.getY();
-		return (ax < x && ax + 48 > x && ay < y && ay + 48 > y);
+		final int enemyX = enemy.getX(), enemyY = enemy.getY();
+		return (enemyX-80 < x && enemyX + 10 > x && enemyY < y && enemyY + 10 > y);
 	}
-    */
 
     /**
      * an overloading function of
      * #collideWith(Enemy enemy)
-     * @param Player : the player
+     * @param Player the player
      * object the bullet is colliding
      * with
      * @return boolean indicating
      * collision
      */
-
-    /*
-	public boolean collideWith(Player player)
+	public boolean collideWithPlayer()
     {
-		final int ax = player.getX(), ay = player.getY();
-		return (ax + 10 < x && ax + 42 > x && ay < y && ay + 32 > y);
+		final int playerX = Player.getX(), playerY = Player.getY();
+		return (playerX - 10 < x && playerX + 42 > x && playerY < y && playerY + 32 > y);
 	}
-    */
-
-	//////////////////////
-    //  OTHER FUNCTIONS //
-    //////////////////////
-
-    /**
-     * Draws the bullet object
-     * @param g the graphics
-	 * component we drawing to
-     */
-	public void draw(final Graphics g)
-        {g.drawImage(img, getX(), getY(), null);}
-
 }
