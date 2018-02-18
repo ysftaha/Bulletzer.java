@@ -95,25 +95,19 @@ final class GamePanel extends JPanel implements KeyListener
 	private static int enemyProbability;
 	// Enemy objects list
 	private static ArrayList<Enemy> enemies = new ArrayList<Enemy>();
-	static
-	{
-		enemies.add(new Enemy(400, 40, 1, 1));
-		enemies.add(new Enemy(40, 20, 1, 2));
-		enemies.add(new Enemy(40, 40, 1, 3));
-	}
+	// Enemy Bullets list
+	private static ArrayList<Bullet> enemyBullets = new ArrayList<Bullet>();
 	// goes from 0 to 2 where 0 = play, 1 = instructions, 2 = about
 	private static int menuState = 0;
-	// used for the second enemy movment
-	private static boolean hitEdge = false;
-	// used for the third enemy movement ;)
-	// private static int spaceTime = 0;
-
+	// Objects that will be get initialized in iteration
+	Token tkn; Enemy enm; Bullet enmB;
 
 	// Images
 		// INGAME Imgaes
 	private static final Image HEALTHBAR = new ImageIcon("Images/healthBar.png").getImage();
 	private static final Image DARKENERGY = new ImageIcon("Images/darkEnergyBar.png").getImage();
 	private static final Image PLAYERB = new ImageIcon("Images/playerBullet.png").getImage();
+	private static final Image ENEMYB = new ImageIcon("Images/enemyBullet.png").getImage();
 	private static final Image SHIELDEM = new ImageIcon("Images/SheildEm.png").getImage();
 	private static final Image FRENZYEM = new ImageIcon("Images/FrenzyEm.png").getImage();
 		// MAINMENU Images
@@ -125,8 +119,12 @@ final class GamePanel extends JPanel implements KeyListener
 	private static final Sound sound   = new Sound();
 
 
-
-
+	static
+	{
+		enemies.add(new Enemy(100, 40, 1, 1));
+		enemies.add(new Enemy(200, 40, 1, 2));
+		enemies.add(new Enemy(300, 40, 1, 3));
+	}
 	/**
 	 * CONSTRUCTOR
 	 */
@@ -314,11 +312,11 @@ final class GamePanel extends JPanel implements KeyListener
 				if(Player.getBulletDelayInterval() == 12) // making sure we are not in frenzy mode
 				{
 					// adds the Playerbullet to the Playerbullets linkedlist to be drawn later
-					playerBullets.add(new Bullet(PLAYERB, Player.getX()-50, Player.getY()-80));
+					playerBullets.add(new Bullet(PLAYERB, Player.getX()-50, Player.getY()-80, 90));
 					Player.setdarkEnergy(Player.getdarkEnergy()-1); // expends darkenergy to shoot a bullet
 				}
 				// if in frenzy mode do not expend dark energy
-				else {playerBullets.add(new Bullet(PLAYERB, Player.getX()-50, Player.getY()-80));}
+				else {playerBullets.add(new Bullet(PLAYERB, Player.getX()-50, Player.getY()-80, 90));}
 			}
 		}
 		// if we are not pressing space we regenerate dark energy by 0.01 per refresh
@@ -326,7 +324,7 @@ final class GamePanel extends JPanel implements KeyListener
 			{Player.setdarkEnergy(Player.getdarkEnergy()+0.01);}
 
 		// MOVING THE BULLETS
-		for (int i = 0; i<playerBullets.size(); i++)
+		for (int i = playerBullets.size()-1; i>-1; i--)
 		{
 			Bullet bull = playerBullets.get(i);
 			if (bull != null) {bull.moveY(true);}
@@ -335,6 +333,8 @@ final class GamePanel extends JPanel implements KeyListener
 		// REMOVING PLAYERBULLETS THAT ARE OUT OF THE SCREEN
 		if (playerBullets.size() != 0)
 			{if ((playerBullets.getFirst()).getY() < -30) {playerBullets.removeFirst();}}
+
+
 
 		// TOKEN TIMER LOGIC
 			// Sheild token
@@ -355,9 +355,10 @@ final class GamePanel extends JPanel implements KeyListener
 			Player.setBulletDelayInterval(12); // turning the interval back to OG
 		}
 		// ENEMY HANDELING AND LOGIC
-		for (Enemy enm: enemies)
-		{
 			// moving enemies
+		for (int i = enemies.size()-1; i > -1; i--)
+		{
+			enm = enemies.get(i);
 			switch (enm.getType())
 			{
 				case 1:
@@ -378,7 +379,7 @@ final class GamePanel extends JPanel implements KeyListener
 					enm.setY(enm.getY()+1);
 					break;
 				case 3:
-					if (enm.getSpaceTime()<120)
+					if (enm.getSpaceTime() < (int)Math.random()*300 +200)
 					{
 						enm.setY(enm.getY()+1);
 						enm.setSpaceTime(enm.getSpaceTime()+1);
@@ -395,12 +396,42 @@ final class GamePanel extends JPanel implements KeyListener
 					break;
 			}
 		}
+			// Checking For collisions
+		for (int i = playerBullets.size() - 1; i>-1; i--)
+		{
+			Bullet bull = playerBullets.get(i);
+			for (int j = enemies.size() -1 ; j > -1; j--)
+			{
+				enm = enemies.get(j);
+				if (bull != null && enm != null)
+				{
+					if (bull.collideWith(enm))
+					{
+						playerBullets.remove(bull);
+						if (enm.getEnemyHp()>0) {enm.setEnemyHp(enm.getEnemyHp()-1);}
+						else {enemies.remove(enm);}
+					}
+				}
+			}
+		}
 
 		// TOKENS
 			// 	SPAWNING
 		// handeling logic other than spawning in paintInGame
 		if (tokenProbability == 1)
 			{tokens.add(new Token((int)(Math.random()*3 + 1), (int)(Math.random()*560 + 10), 5));}
+
+		// ENEMY BULLETS
+		for (int i = enemyBullets.size()-1; i>-1; i--)
+		{
+			// Collision with Player
+			enmB = enemyBullets.get(i);
+			if (enmB.collideWithPlayer())
+			{
+				if(!Player.isSheilded()) {Player.setHealth(Player.getHealth()-1);}
+				enemyBullets.remove(i);
+			}
+		}
 	}
 
 	/**
@@ -411,15 +442,13 @@ final class GamePanel extends JPanel implements KeyListener
 	 */
 	public void paintInGame(final Graphics g)
 	{
-
-
 		// TOKENS
 			// Token DRAWING AND REWARDS
 		// handels bullet rewards and removes the token off the screen
 		// decrementing to avoid ConcurrentModificationException
 		for (int i = tokens.size()-1; i>-1; i--)
 		{
-			Token tkn = tokens.get(i);
+			tkn = tokens.get(i);
 			tkn.draw(g);
 			tkn.moveY();
 			if (tkn.collidePlayer())
@@ -469,7 +498,10 @@ final class GamePanel extends JPanel implements KeyListener
 		Player.draw(g);
 
 		// The player's bullets
-		for (int i = 0; i<playerBullets.size(); i++) {(playerBullets.get(i)).draw(g);}
+		for (int i = playerBullets.size()-1; i>-1; i--) {(playerBullets.get(i)).draw(g);}
+
+		// enemy bullets
+		for (int i = enemyBullets.size()-1; i>-1; i--) {(enemyBullets.get(i)).draw(g);}
 	}
 
 	/**
