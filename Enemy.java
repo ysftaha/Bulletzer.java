@@ -19,7 +19,15 @@ public final class  Enemy
     private int speed;
     private int type;
     private Image enemyImg;
+	// used for second enemy movement
+	private  boolean hitEdge = false;
+	// used for third enemy movement
+	private int spaceTime = 0;
+	private int timeIsHoax = 0;
 
+	/**
+	 * CONSTRUCTOR
+	 */
     public Enemy(final int x, final int y,
                  final int speed, final int type)
     {
@@ -35,26 +43,24 @@ public final class  Enemy
     ///////////////////////
 
 	/**
-	 * @return the enemy's horizontal component (x)
-	 */
-	public int getX() {return x;}
-
-    /**
-     * Moves the enemy horizontaly
-     * @param direction false is left true is right
-     */
-    public void moveX(final boolean direction) {x += direction == false ? -speed : speed;}
-
-	/**
-	 * @return the enemy's vertical component (y)
+	 * @return the enemy's y coordinate
 	 */
 	public int getY() {return y;}
 
 	/**
-     * Moves the enemy vertically
-     * @param direction false is down true is up
-     */
-	public void moveY(final boolean direction) {y += direction == true ? -speed : speed;}
+	 * @param val the y to set
+	 */
+	public void setY(final int val) {this.y = val;}
+
+	/**
+	 * @return the enemy's x to get
+	 */
+	public int getX() {return x;}
+
+	/**
+	 * @param val the x to set
+	 */
+	public void setX(final int val) {this.x = val;}
 
 	/**
 	 * @return the enemy's moving speed
@@ -76,9 +82,43 @@ public final class  Enemy
 	 */
 	public void setType(final int type) {this.type = type;}
 
+	/**
+	 * @return the hitEdge
+	 */
+	public boolean isHitEdge() {return hitEdge;}
+
+	/**
+	 * @param hitEdge the hitEdge to set
+	 */
+	public void setHitEdge(boolean hitEdge) {this.hitEdge = hitEdge;}
+
+	/**
+	 * @return the spaceTime
+	 */
+	public int getSpaceTime() {return spaceTime;}
+
+	/**
+	 * @param spaceTime the spaceTime to set
+	 */
+	public void setSpaceTime(int spaceTime) {this.spaceTime = spaceTime;}
+
+	/**
+	 * @return the timeIsHoax
+	 */
+	public int getTimeIsHoax() {return timeIsHoax;}
+
+	/**
+	 * @param timeIsHoax the timeIsHoax to set
+	 */
+	public void setTimeIsHoax(int timeIsHoax) {this.timeIsHoax = timeIsHoax;}
+
     //////////////////////
     //  OTHER FUNCTIONS //
     //////////////////////
 
+    /** draws the enemy onto the graphic component
+     * @param g the graphics component the function
+     * is drawing to
+     */
     public void draw(final Graphics g) {g.drawImage(enemyImg, x, y, null);}
 }
