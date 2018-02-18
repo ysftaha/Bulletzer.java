@@ -8,6 +8,7 @@
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
@@ -19,6 +20,7 @@ public final class  Enemy
     private int speed;
     private int type;
     private Image enemyImg;
+	private int enemyHp;
 	// used for second enemy movement
 	private  boolean hitEdge = false;
 	// used for third enemy movement
@@ -36,6 +38,19 @@ public final class  Enemy
         this.speed = speed;
         this.type = type;
         enemyImg = new ImageIcon(String.format("Images/enemy%d.png", type)).getImage();
+
+		switch(type)
+		{
+			case 1:
+				enemyHp = 5;
+				break;
+			case 2:
+				enemyHp = 7;
+				break;
+			case 3:
+				enemyHp = 10;
+				break;
+		}
     }
 
     ///////////////////////
@@ -112,6 +127,17 @@ public final class  Enemy
 	 */
 	public void setTimeIsHoax(int timeIsHoax) {this.timeIsHoax = timeIsHoax;}
 
+	/**
+	 * @return the enemyHp
+	 */
+	public int getEnemyHp() {return enemyHp;}
+
+	/**
+	 * @param enemyHp the enemyHp to set
+	 */
+	public void setEnemyHp(int enemyHp) {this.enemyHp = enemyHp;}
+
+
     //////////////////////
     //  OTHER FUNCTIONS //
     //////////////////////
@@ -121,4 +147,24 @@ public final class  Enemy
      * is drawing to
      */
     public void draw(final Graphics g) {g.drawImage(enemyImg, x, y, null);}
+
+	/**
+	 * spawns bullets depending on
+	 * the instance's type
+	 * @return arraylist of bullets
+	 * produced by the object
+	 */
+
+	public /*ArrayList<Bullet>*/ void spawnBullets()
+	{
+		switch (this.type)
+		{
+			case 1:
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+		}
+	}
 }
