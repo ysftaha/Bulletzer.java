@@ -106,8 +106,6 @@ final class GamePanel extends JPanel implements KeyListener
 		// INGAME Imgaes
 	private static final Image HEALTHBAR = new ImageIcon("Images/healthBar.png").getImage();
 	private static final Image DARKENERGY = new ImageIcon("Images/darkEnergyBar.png").getImage();
-	private static final Image PLAYERB = new ImageIcon("Images/playerBullet.png").getImage();
-	private static final Image ENEMYB = new ImageIcon("Images/enemyBullet.png").getImage();
 	private static final Image SHIELDEM = new ImageIcon("Images/SheildEm.png").getImage();
 	private static final Image FRENZYEM = new ImageIcon("Images/FrenzyEm.png").getImage();
 		// MAINMENU Images
@@ -292,7 +290,7 @@ final class GamePanel extends JPanel implements KeyListener
 		tokenProbability = (int)(Math.random()*1700) + 1; // probability of a token spawning
 		enemyProbability = (int)(Math.random()*200) + 1; // probability of a enemy spawning
 
-		if (Player.getHealth() == 0) {gameState = State.GAMEOVER;}
+		if (Player.getHealth() < 1) {gameState = State.GAMEOVER;}
 		Player.refreshBullet(); // refreshes the bullet speed and delay
 
 		// X movement
@@ -312,11 +310,11 @@ final class GamePanel extends JPanel implements KeyListener
 				if(Player.getBulletDelayInterval() == 12) // making sure we are not in frenzy mode
 				{
 					// adds the Playerbullet to the Playerbullets linkedlist to be drawn later
-					playerBullets.add(new Bullet(PLAYERB, Player.getX()-50, Player.getY()-80, 90));
+					playerBullets.add(new Bullet(1, Player.getX()-50, Player.getY()-80, 90));
 					Player.setdarkEnergy(Player.getdarkEnergy()-1); // expends darkenergy to shoot a bullet
 				}
 				// if in frenzy mode do not expend dark energy
-				else {playerBullets.add(new Bullet(PLAYERB, Player.getX()-50, Player.getY()-80, 90));}
+				else {playerBullets.add(new Bullet(1, Player.getX()-50, Player.getY()-80, 90));}
 			}
 		}
 		// if we are not pressing space we regenerate dark energy by 0.01 per refresh
@@ -422,9 +420,13 @@ final class GamePanel extends JPanel implements KeyListener
 			{tokens.add(new Token((int)(Math.random()*3 + 1), (int)(Math.random()*560 + 10), 5));}
 
 		// ENEMY BULLETS
+			// Spawning them
+		for (Enemy enm : enemies)
+			{ for (Bullet bull : enm.spawnBullets()) {enemyBullets.add(bull);} }
+
+			// Collision with Player
 		for (int i = enemyBullets.size()-1; i>-1; i--)
 		{
-			// Collision with Player
 			enmB = enemyBullets.get(i);
 			if (enmB.collideWithPlayer())
 			{
@@ -483,6 +485,7 @@ final class GamePanel extends JPanel implements KeyListener
 		for (int i = 0; i<Player.getHealth(); i++)
 			{g.drawImage(HEALTHBAR, 10+(14*i), 735, this);}
 
+		// dark Energy bars
 		for (int i = 0; i<Player.getdarkEnergy(); i++)
 			{g.drawImage(DARKENERGY, 580 - (14*i), 735, this);}
 
@@ -517,7 +520,7 @@ final class GamePanel extends JPanel implements KeyListener
 	 * to simulate a talent
 	 * crisis
 	 */
-	public void gameOver() {}
+	public void gameOver() {requestFocusInWindow();}
 	public void paintGameOver(final Graphics g) {}
 
 	/**

@@ -39,7 +39,7 @@ public final class  Enemy
         this.type = type;
         enemyImg = new ImageIcon(String.format("Images/enemy%d.png", type)).getImage();
 
-		switch(type)
+		switch(type) // sets anemy hp based on type
 		{
 			case 1:
 				enemyHp = 5;
@@ -155,16 +155,19 @@ public final class  Enemy
 	 * produced by the object
 	 */
 
-	public /*ArrayList<Bullet>*/ void spawnBullets()
+	public ArrayList<Bullet> spawnBullets()
 	{
+		ArrayList <Bullet> retBullets = new ArrayList<Bullet>();
 		switch (this.type)
 		{
 			case 1:
+				retBullets.add(new Bullet(2, x+20, y+30, 0));
 				break;
 			case 2:
 				break;
 			case 3:
 				break;
 		}
+		return retBullets;
 	}
 }
