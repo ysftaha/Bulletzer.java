@@ -22,7 +22,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
-// @SuppressWarnings("all")
+@SuppressWarnings("all")
 public final class Game extends JFrame implements ActionListener
 {
 	// dont worry about this for now (editor yelling at me for it)
@@ -69,7 +69,7 @@ public final class Game extends JFrame implements ActionListener
     public static void main(final String...arguments) {new Game();}
 }
 
-// @SuppressWarnings("all")
+@SuppressWarnings("all")
 final class GamePanel extends JPanel implements KeyListener
 {
 	// dont worry about this for now (editor yelling at me for it)
@@ -77,7 +77,7 @@ final class GamePanel extends JPanel implements KeyListener
 
 	// gameState possible values
 	public enum State
-		{MAINMENU, INSTRUCTIONS, ABOUT, INGAME, PAUSE, GAMEOVER;}
+		{MAINMENU, INSTRUCTIONS, ABOUT, INGAME, PAUSE;}
 	// gameState signaling what part of the GUI we are in
 	private static State gameState;
 	// boolean array of the keys
@@ -127,6 +127,13 @@ final class GamePanel extends JPanel implements KeyListener
 	private static final Image INST1 = new ImageIcon("Images/inst1.png").getImage();
 	private static final Image INST2 = new ImageIcon("Images/inst2.png").getImage();
 	private static final Image INST3 = new ImageIcon("Images/inst3.png").getImage();
+	private static final Image INST4 = new ImageIcon("Images/inst4.png").getImage();
+
+		// ABOUT IMAGES
+	private static final Image ABT = new ImageIcon("Images/abt.png").getImage();
+
+		// PAUSED
+	private static final Image PSD  = new ImageIcon("Images/psd.png").getImage();
 
 	/**
 	 * CONSTRUCTOR
@@ -217,6 +224,8 @@ final class GamePanel extends JPanel implements KeyListener
 					case 2:
 						gameState = State.ABOUT;
 						break;
+					default:
+						System.out.println("Game state Error. Game 221");
 				}
 			}
 		}
@@ -224,9 +233,25 @@ final class GamePanel extends JPanel implements KeyListener
 			{if (keyCode == KeyEvent.VK_ESCAPE) {gameState = State.PAUSE;}}
 
 		else if (gameState == State.PAUSE) // Exit Pause menue
-			{if (keyCode == KeyEvent.VK_ESCAPE) {gameState = State.INGAME;}}
+		{
+			if (keyCode == KeyEvent.VK_ESCAPE) {gameState = State.INGAME;}
+			if (keyCode == KeyEvent.VK_ENTER)
+			{
+				gameState = State.MAINMENU;
+				enemies.clear();
+				enemyBullets.clear();
+				playerBullets.clear();
+				tokens.clear();
+				Player.setHealth(5);
+				Player.setX(275);
+				Player.setY(680);
+				Player.setBulletDelayInterval(12);
+				Player.setSheilded(false);
+			}
+		}
 
-		else if (gameState == State.INSTRUCTIONS) // Exit Pause menue
+		// Exit Pause menue
+		else if (gameState == State.INSTRUCTIONS || gameState == State.ABOUT)
 			{if (keyCode == KeyEvent.VK_ESCAPE) {gameState = State.MAINMENU;}}
 	}
 
@@ -254,11 +279,8 @@ final class GamePanel extends JPanel implements KeyListener
 			case PAUSE:
 				pause();
 				break;
-			case GAMEOVER:
-				gameOver();
-				break;
 			default:
-				System.out.println("Game state Error.");
+				System.out.println("Game state Error. Game 258");
 				break;
 		}
 	}
@@ -278,8 +300,9 @@ final class GamePanel extends JPanel implements KeyListener
 		g.drawImage(INST3, 380,740,this);
 	}
 
-	public void about(){}
-	public void paintAbout(final Graphics g){}
+	public void about(){requestFocusInWindow();}
+	public void paintAbout(final Graphics g)
+		{g.drawImage(ABT, 0,0,this);g.drawImage(INST3, 380,740,this);}
 	/**
 	 * refreshes the frames
 	 * to draw the  main menue
@@ -340,7 +363,19 @@ final class GamePanel extends JPanel implements KeyListener
 			tokens.add(new Token((int)(Math.random()*3 + 1), (int) (Math.random()*560 + 10), 5));
 		}
 
-		if (Player.getHealth() < 1) {gameState = State.GAMEOVER;}
+		if (Player.getHealth() < 1) // resetting everything if player dies
+		{
+			gameState = State.MAINMENU;
+			enemies.clear();
+			enemyBullets.clear();
+			playerBullets.clear();
+			tokens.clear();
+			Player.setHealth(5);
+			Player.setX(275);
+			Player.setY(680);
+			Player.setBulletDelayInterval(12);
+			Player.setSheilded(false);
+		}
 		Player.refreshBullet(); // refreshes the bullet speed and delay
 
 		// X movement
@@ -365,8 +400,7 @@ final class GamePanel extends JPanel implements KeyListener
 					Player.setdarkEnergy(Player.getdarkEnergy()-1); // expends darkenergy to shoot a bullet
 				}
 				// if in frenzy mode do not expend dark energy
-				else
-				{playerBullets.add(new Bullet(1, Player.getX()-50, Player.getY()-80, 90, 0, 9));
+				else {playerBullets.add(new Bullet(1, Player.getX()-50, Player.getY()-80, 90, 0, 9));
 				 sound.playSound("playerShoot");}
 			}
 		}
@@ -383,7 +417,8 @@ final class GamePanel extends JPanel implements KeyListener
 
 		// REMOVING PLAYERBULLETS THAT ARE OUT OF THE SCREEN
 		if (playerBullets.size() != 0)
-			{if ((playerBullets.getFirst()).getY() < -30) {playerBullets.removeFirst();}}
+			{if ((playerBullets.getFirst()).getY() < -30)
+				{playerBullets.removeFirst();}}
 
 		// TOKEN TIMER LOGIC
 			// Sheild token
@@ -401,7 +436,8 @@ final class GamePanel extends JPanel implements KeyListener
 		else if (tokensTmr[1] == 0)
 		{
 			tokensTmr[1] = 1000; // reseting the timer to 10 secs
-			Player.setBulletDelayInterval(12); // turning the interval back to OG
+			// turning the interval back to OG
+			Player.setBulletDelayInterval(12);
 		}
 		// ENEMY HANDELING AND LOGIC
 			// moving enemies
@@ -443,6 +479,8 @@ final class GamePanel extends JPanel implements KeyListener
 						}
 					}
 					break;
+				default:
+					System.out.println("Enemy type Error. Game 456");
 			}
 		}
 			// Checking For collisions
@@ -457,7 +495,8 @@ final class GamePanel extends JPanel implements KeyListener
 					if (bull.collideWith(enm))
 					{
 						playerBullets.remove(bull);
-						if (enm.getEnemyHp()>0) {enm.setEnemyHp(enm.getEnemyHp()-1);}
+						if (enm.getEnemyHp()>0)
+							{enm.setEnemyHp(enm.getEnemyHp()-1);}
 						else {enemies.remove(enm);}
 					}
 				}
@@ -477,7 +516,8 @@ final class GamePanel extends JPanel implements KeyListener
 		// ENEMY BULLETS
 			// Spawning them
 		for (Enemy enm : enemies)
-			{for (Bullet bull : enm.spawnBullets()) {enemyBullets.add(bull);}}
+			{for (Bullet bull : enm.spawnBullets())
+				{enemyBullets.add(bull);}}
 			// Moving them
 		for (Bullet bull: enemyBullets)
 		{
@@ -511,6 +551,9 @@ final class GamePanel extends JPanel implements KeyListener
 					bull.setY(bull.getY()-bull.getspeed());
 					bull.setX(bull.getX()-bull.getspeed());
 					break;
+				default:
+					System.out.println(
+						"Bullet movement function error 524 Game");
 			}
 
 		}
@@ -519,7 +562,8 @@ final class GamePanel extends JPanel implements KeyListener
 		for (int i = enemyBullets.size()-1; i>-1; i--)
 		{
 			enmB = enemyBullets.get(i);
-			if (enmB.getX() > 800 || enmB.getX()< 0 || enmB.getY()< 0 || enmB.getY() > 800)
+			if (enmB.getX() > 800 || enmB.getX()< 0
+				|| enmB.getY()< 0 || enmB.getY() > 800)
 				{enemyBullets.remove(enmB);}
 		}
 
@@ -573,13 +617,16 @@ final class GamePanel extends JPanel implements KeyListener
 												   // timer countdown to start
 						break;
 					default:
-						System.out.println("Token type Error.");
+						System.out.println("Token type Error. 587 Game");
 						break;
 				}
 
 				tokens.remove(tkn);
 			}
 		}
+		// ESC TO PAUSE
+		g.drawImage(INST4, 10, 15, this);
+
 		// ENEMIES
 		for (Enemy enm: enemies) {enm.draw(g);}
 
@@ -603,10 +650,12 @@ final class GamePanel extends JPanel implements KeyListener
 		Player.draw(g);
 
 		// The player's bullets
-		for (int i = playerBullets.size()-1; i>-1; i--) {(playerBullets.get(i)).draw(g);}
+		for (int i = playerBullets.size()-1; i>-1; i--)
+			{(playerBullets.get(i)).draw(g);}
 
 		// enemy bullets
-		for (int i = enemyBullets.size()-1; i>-1; i--) {(enemyBullets.get(i)).draw(g);}
+		for (int i = enemyBullets.size()-1; i>-1; i--)
+			{(enemyBullets.get(i)).draw(g);}
 	}
 
 	/**
@@ -615,15 +664,10 @@ final class GamePanel extends JPanel implements KeyListener
 	 * menu
 	 */
 	public void pause() {requestFocusInWindow();}
-	public void paintPause(final Graphics g) {}
-
-	/**
-	 * refreshes the frames
-	 * to simulate a talent
-	 * crisis
-	 */
-	public void gameOver() {requestFocusInWindow();}
-	public void paintGameOver(final Graphics g) {}
+	public void paintPause(final Graphics g)
+	{
+		g.drawImage(PSD, 0,200,this);
+	}
 
 	/**
 	 * draws to graphic component
@@ -633,7 +677,6 @@ final class GamePanel extends JPanel implements KeyListener
 	 * @see #paintMainMenu(Graphics)
 	 * @see #paintInGame(Graphics)
 	 * @see #paintPause(Graphics)
-	 * @see #paintGameOver(Graphics)
 	 */
 
 	@Override
@@ -660,11 +703,8 @@ final class GamePanel extends JPanel implements KeyListener
 			case PAUSE:
 				paintPause(g);
 				break;
-			case GAMEOVER:
-				paintGameOver(g);
-				break;
 			default:
-				System.out.println("Paint Function Error.");
+				System.out.println("Paint Function Error. 666 Game");
 				break;
 		}
 	}
