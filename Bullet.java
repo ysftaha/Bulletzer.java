@@ -16,11 +16,10 @@ import javax.swing.ImageIcon;
 public class Bullet
 {
 	private double x, y;      // the coordinates of the bullet
-    private double dx, dy;
 	private Image img;        // the bullet sprite
 	private int type;
-    private double speed = 9;
-    private double radians;
+    private double speed;
+    private int mvType;
 
     /**
      * CONSTRUCTOR
@@ -34,10 +33,13 @@ public class Bullet
 	 * which to calculate the bullet's
 	 * movement
      */
-	public Bullet(final int type, final double x, final double y, final double angle)
+	public Bullet(final int type, final double x, final double y,
+				  final double angle, final int mvType, final double speed)
     {
 		this.x = x;
 		this.y = y;
+		this.speed = speed;
+		this.mvType = mvType;
 
 		switch(type)
 		{
@@ -48,11 +50,6 @@ public class Bullet
 				img = new ImageIcon("Images/enemyBullet.png").getImage();
 				break;
 		}
-
-		radians = Math.toRadians(angle);
-
-		dx = Math.cos(radians) * speed;
-		dy = Math.sin(radians) * speed;
 	}
 
     ///////////////////////
@@ -64,22 +61,21 @@ public class Bullet
      */
     public double getX() {return x;}
 
-    /**
-     * Moves the Bullet horizontaly
-     * @param direction false is left true is right
-     */
-	public void moveX(final boolean direction) {x += direction == false ? -speed : speed;}
+	/**
+	 * @param val the y to set
+	 */
+	public void setX(final double val) {this.x = val;}
+
 
     /**
      * @return the Bullet's vertical component (Y)
      */
 	public double getY() {return y;}
 
-    /**
-     * Moves the Bullet vertically
-     * @param direction false is down true is up
-     */
-	public void moveY(final boolean direction) {y += direction == true ? -speed : speed;}
+	/**
+	 * @param val the y to set
+	 */
+	public void setY(final double val) {this.y = val;}
 
 	/**
 	 * @return the speed
@@ -92,37 +88,6 @@ public class Bullet
 	public void setspeed(double speed) {this.speed = speed;}
 
 	/**
-	 * @return the radians
-	 */
-	public double getRadians() {return radians;}
-
-	/**
-	 * @param radians the radians to set
-	 */
-	public void setRadians(double radians) {this.radians = radians;}
-
-
-	/**
-	 * @return the dx
-	 */
-	public double getDx() {return dx;}
-
-	/**
-	 * @param dx the dx to set
-	 */
-	public void setDx(double dx) {this.dx = dx;}
-
-	/**
-	 * @return the dy
-	 */
-	public double getDy() {return dy;}
-
-	/**
-	 * @param dy the dy to set
-	 */
-	public void setDy(double dy) {this.dy = dy;}
-
-	/**
 	 * @return the type
 	 */
 	public int getType() {return type;}
@@ -131,6 +96,17 @@ public class Bullet
 	 * @param type the type to set
 	 */
 	public void setType(int type) {this.type = type;}
+
+
+	/**
+	 * @return the mvType
+	 */
+	public int getMvType() {return mvType;}
+
+	/**
+	 * @param mvType the mvType to set
+	 */
+	public void setMvType(int mvType) {this.mvType = mvType;}
 
 	//////////////////////
     //  OTHER FUNCTIONS //
@@ -154,11 +130,16 @@ public class Bullet
     * meaning the bullet is colliding
     * with the enemy
     */
-
 	public boolean collideWith(Enemy enemy)
     {
 		final int enemyX = enemy.getX(), enemyY = enemy.getY();
 		return (enemyX-80 < x && enemyX + 10 > x && enemyY < y && enemyY + 10 > y);
+	}
+
+	public boolean collideWith(Bullet bullet)
+	{
+		final int enmBullX = (int)bullet.getX(), enmBullY = (int)bullet.getY();
+		return (enmBullX-80 < x && enmBullX + 10 > x && enmBullY < y && enmBullY + 10 > y);
 	}
 
     /**
