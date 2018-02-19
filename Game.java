@@ -104,28 +104,30 @@ final class GamePanel extends JPanel implements KeyListener
 	private static int whichEnm;
 	// Objects that will be get initialized in iteration
 	private static Token tkn; Enemy enm; Bullet enmB; Bullet enmBull;
+	// Sound object. will spit out something that tingles your ears
+	private static final Sound sound   = new Sound();
 
 	// Images
+
 		// INGAME Imgaes
 	private static final Image HEALTHBAR = new ImageIcon("Images/healthBar.png").getImage();
 	private static final Image DARKENERGY = new ImageIcon("Images/darkEnergyBar.png").getImage();
 	private static final Image SHIELDEM = new ImageIcon("Images/SheildEm.png").getImage();
 	private static final Image FRENZYEM = new ImageIcon("Images/FrenzyEm.png").getImage();
+
 		// MAINMENU Images
 	private static final Image LOGO = new ImageIcon("Images/BulletzerLogo.png").getImage();
 	private static final Image MENU1 = new ImageIcon("Images/menu1.png").getImage();
 	private static final Image MENU2 = new ImageIcon("Images/menu2.png").getImage();
 	private static final Image MENU3 = new ImageIcon("Images/menu3.png").getImage();
 	private static final Image LICENSE = new ImageIcon("Images/license.png").getImage();
-	private static final Sound sound   = new Sound();
+	private static final Image INST0 = new ImageIcon("Images/inst0.png").getImage();
 
+		// INSTRUCTIONS IMAGES
+	private static final Image INST1 = new ImageIcon("Images/inst1.png").getImage();
+	private static final Image INST2 = new ImageIcon("Images/inst2.png").getImage();
+	private static final Image INST3 = new ImageIcon("Images/inst3.png").getImage();
 
-	// static
-	// {
-	// 	enemies.add(new Enemy(100, 40, 1, 1));
-	// 	enemies.add(new Enemy(200, 40, 1, 2));
-	// 	enemies.add(new Enemy(300, 40, 1, 3));
-	// }
 	/**
 	 * CONSTRUCTOR
 	 */
@@ -137,8 +139,8 @@ final class GamePanel extends JPanel implements KeyListener
 	}
 
 	/**
-	 * @param key : the key in value on the keyboard
-	 * @param state : the bool state explained below
+	 * @param key the key in value on the keyboard
+	 * @param state the bool state explained below
 	 * sets the state for a key on the keyboard
 	 * true  = pressed
 	 * false = released
@@ -223,6 +225,9 @@ final class GamePanel extends JPanel implements KeyListener
 
 		else if (gameState == State.PAUSE) // Exit Pause menue
 			{if (keyCode == KeyEvent.VK_ESCAPE) {gameState = State.INGAME;}}
+
+		else if (gameState == State.INSTRUCTIONS) // Exit Pause menue
+			{if (keyCode == KeyEvent.VK_ESCAPE) {gameState = State.MAINMENU;}}
 	}
 
 	/**
@@ -236,6 +241,12 @@ final class GamePanel extends JPanel implements KeyListener
 		{
 			case MAINMENU:
 				mainMenu();
+				break;
+			case ABOUT:
+				about();
+				break;
+			case INSTRUCTIONS:
+				instructions();
 				break;
 			case INGAME:
 			    inGame();
@@ -252,6 +263,23 @@ final class GamePanel extends JPanel implements KeyListener
 		}
 	}
 
+
+	public void instructions() {requestFocusInWindow();}
+	/**
+	 * draws the diffrent images
+	 * in the instructions
+	 * @param g the graphics component
+	 * the function is drawing to
+	 */
+	public void paintInstructions(final Graphics g)
+	{
+		g.drawImage(INST1, 100,50,this);
+		g.drawImage(INST2, 40,350,this);
+		g.drawImage(INST3, 380,740,this);
+	}
+
+	public void about(){}
+	public void paintAbout(final Graphics g){}
 	/**
 	 * refreshes the frames
 	 * to draw the  main menue
@@ -280,6 +308,7 @@ final class GamePanel extends JPanel implements KeyListener
 				g.drawImage(MENU3, 50,322,this);
 				break;
 		}
+		g.drawImage(INST0, 155,630,this);
 	}
 
 	/**
@@ -295,7 +324,14 @@ final class GamePanel extends JPanel implements KeyListener
 
 		// Spawning Enemies
 		if (enemyProbability == 1)
-			{enemies.add(new Enemy((int)(Math.random()*560) +10, 10, 8, (int)(Math.random()*3) + 1));}
+		{
+			whichEnm = (int)(Math.random()*30)+1;
+			if (1 < whichEnm && whichEnm < 15)
+				{enemies.add(new Enemy((int)(Math.random()*560) +10, 10, 8, 2));}
+			else if (15 < whichEnm && whichEnm < 25)
+				{enemies.add(new Enemy((int)(Math.random()*560) +10, 10, 2, 1));}
+			else {enemies.add(new Enemy((int)(Math.random()*560) +10, 10, 8, 3));}
+		}
 
 		// 	Spawning Tokens
 		// handeling logic other than spawning in paintInGame
@@ -611,6 +647,12 @@ final class GamePanel extends JPanel implements KeyListener
 		{
 			case MAINMENU:
 				paintMainMenu(g);
+				break;
+			case INSTRUCTIONS:
+				paintInstructions(g);
+				break;
+			case ABOUT:
+				paintAbout(g);
 				break;
 			case INGAME:
 				paintInGame(g);
