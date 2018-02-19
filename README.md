@@ -1,10 +1,7 @@
 # Bulletzer
 
 Bulletzer is my midterm ICS4U game that is meant to strengthen my game logic and java usage.
-The game I choose to do is a bullet hell game with a twist of my own (neon arcade theme).
-I had alot of fun doing this and realised that although the change from a language to another
-might change the syntax, it doesn't change the logic; my ICS3U final project was a similar game
-but in python, [check it out](https://github.com/YusufTaha/RayZ) sometime.
+The game I choose to do is a bullet hell game with a twist of my own (neon arcade theme) which was all illustrated by me, you will find the .ai file in the Images folder.
 
 ![](README.res/MainMenue.png)
 ![](README.res/Instructions.png)
