@@ -34,22 +34,20 @@ public final class Player
 	 */
 	public static int getX() {return x;}
 
-    /**
-     * Moves the player horizontaly
-     * @param direction false is left true is right
-     */
-	public static void moveX(boolean direction) {x += direction == false ? -speed : speed;}
+	/**
+	 * @param x the new x to set
+	 */
+	public static void setX(int x) {Player.x = x;}
 
 	/**
 	 * @return the the vetrical coordinate (Y)
 	 */
 	public static int getY() {return y;}
 
-    /**
-     * Moves the player vertically
-     * @param direction false is down true is up
-     */
-	public static void moveY(boolean direction) {y += direction == true ? -speed : speed;}
+	/**
+	 * @param y the new y to set
+	 */
+	public static void setY(int y) {Player.y = y;}
 
     /**
      * @return the Health of the player
@@ -111,6 +109,18 @@ public final class Player
     //////////////////////
     //  OTHER FUNCTIONS //
     //////////////////////
+
+    /**
+     * Moves the player horizontaly
+     * @param direction false is left true is right
+     */
+	public static void moveX(boolean direction) {x += direction == false ? -speed : speed;}
+
+	/**
+     * Moves the player vertically
+     * @param direction false is down true is up
+     */
+	public static void moveY(boolean direction) {y += direction == true ? -speed : speed;}
 
     /**
      * Draws the player object
