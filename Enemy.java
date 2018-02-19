@@ -26,6 +26,7 @@ public final class  Enemy
 	// used for third enemy movement
 	private int spaceTime = 0;
 	private int timeIsHoax = 0;
+	private final Sound sound   = new Sound();
 
 	/**
 	 * CONSTRUCTOR
@@ -158,14 +159,23 @@ public final class  Enemy
 	public ArrayList<Bullet> spawnBullets()
 	{
 		ArrayList <Bullet> retBullets = new ArrayList<Bullet>();
+		int rand = (int) (Math.random() * 200) + 1; // probability of enemy shooting
 		switch (this.type)
 		{
 			case 1:
-				retBullets.add(new Bullet(2, x+20, y+30, 0));
+				if(rand == 1) {retBullets.add(new Bullet(2, x+20, y+30, 0, (int) (Math.random() * 7) + 1, 4));}
 				break;
 			case 2:
+				if(rand == 1) {retBullets.add(new Bullet(2, x+20, y+30, 0, 4, 4));}
+				if(rand == 1) {retBullets.add(new Bullet(2, x+20, y+30, 0, 3, 4));}
+				if(rand == 1) {retBullets.add(new Bullet(2, x+20, y+30, 0, 5, 4));}
 				break;
 			case 3:
+				if(rand == 1) {retBullets.add(new Bullet(2, x+20, y+30, 0, 4, 4));}
+				if(rand == 1) {retBullets.add(new Bullet(2, x+20, y+30, 0, 3, 4));}
+				if(rand == 1) {retBullets.add(new Bullet(2, x+20, y+30, 0, 5, 4));}
+				if(rand == 1) {retBullets.add(new Bullet(2, x+20, y+30, 0, 6, 4));}
+				if(rand == 1) {retBullets.add(new Bullet(2, x+20, y+30, 0, 7, 4));}
 				break;
 		}
 		return retBullets;

@@ -19,7 +19,7 @@ public final class Player
     // player object feilds {•̃_•̃}
 	private static int x = 275, y = 680; // middle of the screen above the hud starting point
 	private static int health = 5, speed  = 7;
-	private static double darkEnergy = 10;
+	private static double darkEnergy = 50;
     private static boolean sheilded = false;
 	private static int bulletDelayInterval = 12; // the interval to wait between bullets
 	private static int bulletDelayIterator = 0;  // decrements by one from

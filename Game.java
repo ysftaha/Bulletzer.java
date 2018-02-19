@@ -76,7 +76,8 @@ final class GamePanel extends JPanel implements KeyListener
 	private static final long serialVersionUID = 1L;
 
 	// gameState possible values
-	public enum State {MAINMENU, INSTRUCTIONS, ABOUT, INGAME, PAUSE, GAMEOVER;}
+	public enum State
+		{MAINMENU, INSTRUCTIONS, ABOUT, INGAME, PAUSE, GAMEOVER;}
 	// gameState signaling what part of the GUI we are in
 	private static State gameState;
 	// boolean array of the keys
@@ -99,8 +100,10 @@ final class GamePanel extends JPanel implements KeyListener
 	private static ArrayList<Bullet> enemyBullets = new ArrayList<Bullet>();
 	// goes from 0 to 2 where 0 = play, 1 = instructions, 2 = about
 	private static int menuState = 0;
+	// which enemy doe?
+	private static int whichEnm;
 	// Objects that will be get initialized in iteration
-	Token tkn; Enemy enm; Bullet enmB;
+	private static Token tkn; Enemy enm; Bullet enmB; Bullet enmBull;
 
 	// Images
 		// INGAME Imgaes
@@ -117,12 +120,12 @@ final class GamePanel extends JPanel implements KeyListener
 	private static final Sound sound   = new Sound();
 
 
-	static
-	{
-		enemies.add(new Enemy(100, 40, 1, 1));
-		enemies.add(new Enemy(200, 40, 1, 2));
-		enemies.add(new Enemy(300, 40, 1, 3));
-	}
+	// static
+	// {
+	// 	enemies.add(new Enemy(100, 40, 1, 1));
+	// 	enemies.add(new Enemy(200, 40, 1, 2));
+	// 	enemies.add(new Enemy(300, 40, 1, 3));
+	// }
 	/**
 	 * CONSTRUCTOR
 	 */
@@ -287,8 +290,19 @@ final class GamePanel extends JPanel implements KeyListener
 	public void inGame()
 	{
 		requestFocusInWindow();
-		tokenProbability = (int)(Math.random()*1700) + 1; // probability of a token spawning
-		enemyProbability = (int)(Math.random()*200) + 1; // probability of a enemy spawning
+		tokenProbability = (int)(Math.random()*180) + 1; // probability of a token spawning
+		enemyProbability = (int)(Math.random()*80) + 1; // probability of a enemy spawning
+
+		// Spawning Enemies
+		if (enemyProbability == 1)
+			{enemies.add(new Enemy((int)(Math.random()*560) +10, 10, 8, (int)(Math.random()*3) + 1));}
+
+		// 	Spawning Tokens
+		// handeling logic other than spawning in paintInGame
+		if (tokenProbability == 1)
+		{
+			tokens.add(new Token((int)(Math.random()*3 + 1), (int) (Math.random()*560 + 10), 5));
+		}
 
 		if (Player.getHealth() < 1) {gameState = State.GAMEOVER;}
 		Player.refreshBullet(); // refreshes the bullet speed and delay
@@ -310,29 +324,30 @@ final class GamePanel extends JPanel implements KeyListener
 				if(Player.getBulletDelayInterval() == 12) // making sure we are not in frenzy mode
 				{
 					// adds the Playerbullet to the Playerbullets linkedlist to be drawn later
-					playerBullets.add(new Bullet(1, Player.getX()-50, Player.getY()-80, 90));
+					playerBullets.add(new Bullet(1, Player.getX()-50, Player.getY()-80, 90, 0, 9));
+					sound.playSound("playerShoot");
 					Player.setdarkEnergy(Player.getdarkEnergy()-1); // expends darkenergy to shoot a bullet
 				}
 				// if in frenzy mode do not expend dark energy
-				else {playerBullets.add(new Bullet(1, Player.getX()-50, Player.getY()-80, 90));}
+				else
+				{playerBullets.add(new Bullet(1, Player.getX()-50, Player.getY()-80, 90, 0, 9));
+				 sound.playSound("playerShoot");}
 			}
 		}
 		// if we are not pressing space we regenerate dark energy by 0.01 per refresh
-		if (!keys[KeyEvent.VK_SPACE] && Player.getdarkEnergy() < 10)
-			{Player.setdarkEnergy(Player.getdarkEnergy()+0.01);}
+		if (!keys[KeyEvent.VK_SPACE] && Player.getdarkEnergy() < 50)
+			{Player.setdarkEnergy(Player.getdarkEnergy()+0.1);}
 
 		// MOVING THE BULLETS
 		for (int i = playerBullets.size()-1; i>-1; i--)
 		{
 			Bullet bull = playerBullets.get(i);
-			if (bull != null) {bull.moveY(true);}
+			if (bull != null) {bull.setY((int)(bull.getY()-bull.getspeed()));}
 		}
 
 		// REMOVING PLAYERBULLETS THAT ARE OUT OF THE SCREEN
 		if (playerBullets.size() != 0)
 			{if ((playerBullets.getFirst()).getY() < -30) {playerBullets.removeFirst();}}
-
-
 
 		// TOKEN TIMER LOGIC
 			// Sheild token
@@ -411,18 +426,67 @@ final class GamePanel extends JPanel implements KeyListener
 					}
 				}
 			}
-		}
 
-		// TOKENS
-			// 	SPAWNING
-		// handeling logic other than spawning in paintInGame
-		if (tokenProbability == 1)
-			{tokens.add(new Token((int)(Math.random()*3 + 1), (int)(Math.random()*560 + 10), 5));}
+			for (int k = enemyBullets.size() -1 ; k > -1; k--)
+			{
+				enmBull = enemyBullets.get(k);
+				if (bull.collideWith(enmBull))
+				{
+					enemyBullets.remove(enmBull);
+					playerBullets.remove(bull);
+				}
+			}
+		}
 
 		// ENEMY BULLETS
 			// Spawning them
 		for (Enemy enm : enemies)
-			{ for (Bullet bull : enm.spawnBullets()) {enemyBullets.add(bull);} }
+			{for (Bullet bull : enm.spawnBullets()) {enemyBullets.add(bull);}}
+			// Moving them
+		for (Bullet bull: enemyBullets)
+		{
+			switch(bull.getMvType())
+			{
+				case 0:
+					bull.setY(bull.getY()-bull.getspeed());
+					break;
+				case 1:
+					bull.setY(bull.getY()-bull.getspeed());
+					bull.setX(bull.getX()+bull.getspeed());
+					break;
+				case 2:
+					bull.setX(bull.getX()+bull.getspeed());
+					break;
+				case 3:
+					bull.setY(bull.getY()+bull.getspeed());
+					bull.setX(bull.getX()+bull.getspeed());
+					break;
+				case 4:
+					bull.setY(bull.getY()+bull.getspeed());
+					break;
+				case 5:
+					bull.setY(bull.getY()+bull.getspeed());
+					bull.setX(bull.getX()-bull.getspeed());
+					break;
+				case 6:
+					bull.setX(bull.getX()-bull.getspeed());
+					break;
+				case 7:
+					bull.setY(bull.getY()-bull.getspeed());
+					bull.setX(bull.getX()-bull.getspeed());
+					break;
+			}
+
+		}
+
+		// Removing them
+		for (int i = enemyBullets.size()-1; i>-1; i--)
+		{
+			enmB = enemyBullets.get(i);
+			if (enmB.getX() > 800 || enmB.getX()< 0 || enmB.getY()< 0 || enmB.getY() > 800)
+				{enemyBullets.remove(enmB);}
+		}
+
 
 			// Collision with Player
 		for (int i = enemyBullets.size()-1; i>-1; i--)
@@ -462,11 +526,13 @@ final class GamePanel extends JPanel implements KeyListener
 						break;
 					case 2:
 						tkn.rewardSheild();
+						sound.playSound("sheild");
 						tokensTmrSwitch[0] = true; // sets the sheilded
 												   // timer countdown to start
 						break;
 					case 3:
 						tkn.rewardFrenzy();
+						sound.playSound("frenzy");
 						tokensTmrSwitch[1] = true; // sets the Frenzy
 												   // timer countdown to start
 						break;
@@ -486,7 +552,7 @@ final class GamePanel extends JPanel implements KeyListener
 			{g.drawImage(HEALTHBAR, 10+(14*i), 735, this);}
 
 		// dark Energy bars
-		for (int i = 0; i<Player.getdarkEnergy(); i++)
+		for (int i = 0; i<Player.getdarkEnergy()/5; i++)
 			{g.drawImage(DARKENERGY, 580 - (14*i), 735, this);}
 
 		// empowered sprite around Player sprite (Sheild active)
