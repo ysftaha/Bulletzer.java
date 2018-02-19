@@ -62,9 +62,9 @@ public class Bullet
     public double getX() {return x;}
 
 	/**
-	 * @param val the y to set
+	 * @param x the y to set
 	 */
-	public void setX(final double val) {this.x = val;}
+	public void setX(final double x) {this.x = x;}
 
 
     /**
@@ -73,9 +73,9 @@ public class Bullet
 	public double getY() {return y;}
 
 	/**
-	 * @param val the y to set
+	 * @param y the y to set
 	 */
-	public void setY(final double val) {this.y = val;}
+	public void setY(final double y) {this.y = y;}
 
 	/**
 	 * @return the speed
