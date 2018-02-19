@@ -64,9 +64,9 @@ public final class  Enemy
 	public int getY() {return y;}
 
 	/**
-	 * @param val the y to set
+	 * @param y the y to set
 	 */
-	public void setY(final int val) {this.y = val;}
+	public void setY(final int y) {this.y = y;}
 
 	/**
 	 * @return the enemy's x to get
@@ -74,9 +74,9 @@ public final class  Enemy
 	public int getX() {return x;}
 
 	/**
-	 * @param val the x to set
+	 * @param x the x to set
 	 */
-	public void setX(final int val) {this.x = val;}
+	public void setX(final int x) {this.x = x;}
 
 	/**
 	 * @return the enemy's moving speed
