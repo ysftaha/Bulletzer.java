@@ -2,7 +2,6 @@
  * Game.java
  * @author Yusuf A. Taha
  * Where the magic happens
- *         🎩
  */
 
 import java.util.LinkedList;
