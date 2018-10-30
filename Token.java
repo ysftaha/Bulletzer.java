@@ -1,6 +1,6 @@
 /**
  * Token.java
- * @author Yusuf A. Taha
+ * @author Youssof A. Taha
  * Token's class
  */
 
@@ -12,21 +12,21 @@ import javax.swing.ImageIcon;
 public final class Token
 {
 
-    private int x, y;
-    private int speed = 6, type;
+	private int x, y;
+	private int speed = 6, type;
 	private String[] imageDirs =
-		{"Images/heartTK.png", "Images/sheildTK.png", "Images/frenzyTK.png"};
+	{"Images/heartTK.png", "Images/sheildTK.png", "Images/frenzyTK.png"};
 
-    public Token(final int type, final int x, final int y)
-    {
+	public Token(final int type, final int x, final int y)
+	{
 		this.type = type;
-        this.x = x;
-        this.y = y;
-    }
+		this.x = x;
+		this.y = y;
+	}
 
-    ///////////////////////
+	///////////////////////
 	// SETTERS & GETTERS //
-    ///////////////////////
+	///////////////////////
 
 	/**
 	 * @return the token's horizontal component (x)
@@ -38,9 +38,9 @@ public final class Token
 	 */
 	public int getY() {return y;}
 
-    /**
-     * Moves the token vertically down
-     */
+	/**
+	 * Moves the token vertically down
+	 */
 	public void moveY() {y += speed;}
 
 	/**
@@ -59,16 +59,16 @@ public final class Token
 	public int getType() {return type;}
 
 	//////////////////////
-    //  OTHER FUNCTIONS //
-    //////////////////////
+	//  OTHER FUNCTIONS //
+	//////////////////////
 
-    /**
-     * Draws the token object
-     * @param g the graphics
+	/**
+	 * Draws the token object
+	 * @param g the graphics
 	 * component we drawing to
-     */
+	 */
 	public void draw(final Graphics g)
-		{g.drawImage(new ImageIcon(imageDirs[type-1]).getImage(), getX(), getY(), null);}
+	{g.drawImage(new ImageIcon(imageDirs[type-1]).getImage(), getX(), getY(), null);}
 
 	/**
 	 * checks if for collision
@@ -87,19 +87,19 @@ public final class Token
 	 * Classic +1 life for a max of 5
 	 */
 	public void rewardHealth()
-		{if (Player.getHealth() < 5) {Player.setHealth(Player.getHealth()+1);} }
+	{if (Player.getHealth() < 5) {Player.setHealth(Player.getHealth()+1);} }
 
 	/**
 	 * sheilds the player for 10 seconds
 	 * making enemy bullets futile. MWAHAHAHAAA
 	 */
 	public void rewardSheild()
-		{Player.setSheilded(true);}
+	{Player.setSheilded(true);}
 
 	/**
 	 * Increases the allowed player
 	 * bullets on screen. i.e. Machinegun
-	 * */
+	 */
 	public void rewardFrenzy()
-		{Player.setBulletDelayInterval(6);}
+	{Player.setBulletDelayInterval(6);}
 }

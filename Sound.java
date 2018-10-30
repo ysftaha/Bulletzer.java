@@ -1,6 +1,6 @@
 /**
  * Sound.java
- * @author Yusuf A. Taha
+ * @author Youssof A. Taha
  * handels .wav sound files
  */
 
@@ -30,11 +30,11 @@ public class Sound
 		// loads the sound and starts it
 		try
 		{
-		    audioInputStream =
+			audioInputStream =
 				AudioSystem.getAudioInputStream(this.getClass().getResource(soundURL));
-		    clip = AudioSystem.getClip();
-		    clip.open(audioInputStream);
-		    clip.start();
+			clip = AudioSystem.getClip();
+			clip.open(audioInputStream);
+			clip.start();
 		}
 		catch (Exception e)
 		{

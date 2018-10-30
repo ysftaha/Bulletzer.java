@@ -1,6 +1,6 @@
 /**
  * Enemy.java
- * @author Yusuf A. Taha
+ * @author Youssof A. Taha
  * @see Game.java
  * The enemy object
  * class 👾
@@ -15,11 +15,11 @@ import javax.swing.ImageIcon;
 public final class  Enemy
 {
 	// Enemy object feilds
-    private int x;
-    private int y;
-    private int speed;
-    private int type;
-    private Image enemyImg;
+	private int x;
+	private int y;
+	private int speed;
+	private int type;
+	private Image enemyImg;
 	private int enemyHp;
 	// used for second enemy movement
 	private  boolean hitEdge = false;
@@ -31,14 +31,14 @@ public final class  Enemy
 	/**
 	 * CONSTRUCTOR
 	 */
-    public Enemy(final int x, final int y,
-                 final int speed, final int type)
-    {
-        this.x = x;
-        this.y = y;
-        this.speed = speed;
-        this.type = type;
-        enemyImg = new ImageIcon(String.format("Images/enemy%d.png", type)).getImage();
+	public Enemy(final int x, final int y,
+			final int speed, final int type)
+	{
+		this.x = x;
+		this.y = y;
+		this.speed = speed;
+		this.type = type;
+		enemyImg = new ImageIcon(String.format("Images/enemy%d.png", type)).getImage();
 
 		switch(type) // sets anemy hp based on type
 		{
@@ -52,11 +52,11 @@ public final class  Enemy
 				enemyHp = 10;
 				break;
 		}
-    }
+	}
 
-    ///////////////////////
+	///////////////////////
 	// SETTERS & GETTERS //
-    ///////////////////////
+	///////////////////////
 
 	/**
 	 * @return the enemy's y coordinate
@@ -139,15 +139,15 @@ public final class  Enemy
 	public void setEnemyHp(int enemyHp) {this.enemyHp = enemyHp;}
 
 
-    //////////////////////
-    //  OTHER FUNCTIONS //
-    //////////////////////
+	//////////////////////
+	//  OTHER FUNCTIONS //
+	//////////////////////
 
-    /** draws the enemy onto the graphic component
-     * @param g the graphics component the function
-     * is drawing to
-     */
-    public void draw(final Graphics g) {g.drawImage(enemyImg, x, y, null);}
+	/** draws the enemy onto the graphic component
+	 * @param g the graphics component the function
+	 * is drawing to
+	 */
+	public void draw(final Graphics g) {g.drawImage(enemyImg, x, y, null);}
 
 	/**
 	 * spawns bullets depending on

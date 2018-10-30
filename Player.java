@@ -1,6 +1,6 @@
 /**
  * Player.java
- * @author Yusuf A. Taha
+ * @author Youssof A. Taha
  * @see Game.java
  * The player object 🚀
  */
@@ -13,21 +13,21 @@ import javax.swing.ImageIcon;
 public final class Player
 {
 
-    // Images
-    private final static Image PLAYERIMG = new ImageIcon("Images/playerShip.png").getImage();
+	// Images
+	private final static Image PLAYERIMG = new ImageIcon("Images/playerShip.png").getImage();
 
-    // player object feilds {•̃_•̃}
+	// player object feilds {•̃_•̃}
 	private static int x = 275, y = 680; // middle of the screen above the hud starting point
 	private static int health = 5, speed  = 7;
 	private static double darkEnergy = 50;
-    private static boolean sheilded = false;
+	private static boolean sheilded = false;
 	private static int bulletDelayInterval = 12; // the interval to wait between bullets
 	private static int bulletDelayIterator = 0;  // decrements by one from
-                                                 // bulletDelayInterval to zero then resets
+	// bulletDelayInterval to zero then resets
 
-    ///////////////////////
+	///////////////////////
 	// SETTERS & GETTERS //
-    ///////////////////////
+	///////////////////////
 
 	/**
 	 * @return the horizontal coordinate (X)
@@ -49,15 +49,15 @@ public final class Player
 	 */
 	public static void setY(int y) {Player.y = y;}
 
-    /**
-     * @return the Health of the player
-     */
+	/**
+	 * @return the Health of the player
+	 */
 	public static int getHealth() {return health;}
 
-    /**
-     * @param health the health
-     * to set
-     */
+	/**
+	 * @param health the health
+	 * to set
+	 */
 	public static void setHealth(int health) {Player.health = health;}
 
 	/**
@@ -65,10 +65,10 @@ public final class Player
 	 */
 	public static int getSpeed() {return speed;}
 
-    /**
-     * @param speed the speed
-     * to set
-     */
+	/**
+	 * @param speed the speed
+	 * to set
+	 */
 	public static void setSpeed(int speed) {Player.speed = speed;}
 
 	/**
@@ -106,36 +106,36 @@ public final class Player
 	 */
 	public static int getBulletDelayIterator() {return bulletDelayIterator;}
 
-    //////////////////////
-    //  OTHER FUNCTIONS //
-    //////////////////////
+	//////////////////////
+	//  OTHER FUNCTIONS //
+	//////////////////////
 
-    /**
-     * Moves the player horizontaly
-     * @param direction false is left true is right
-     */
+	/**
+	 * Moves the player horizontaly
+	 * @param direction false is left true is right
+	 */
 	public static void moveX(boolean direction) {x += direction == false ? -speed : speed;}
 
 	/**
-     * Moves the player vertically
-     * @param direction false is down true is up
-     */
+	 * Moves the player vertically
+	 * @param direction false is down true is up
+	 */
 	public static void moveY(boolean direction) {y += direction == true ? -speed : speed;}
 
-    /**
-     * Draws the player object
-     * @param g : the graphics
+	/**
+	 * Draws the player object
+	 * @param g : the graphics
 	 * component we drawing to
-     */
+	 */
 	public static void draw(Graphics g) {g.drawImage(PLAYERIMG, x, y, null);}
 
-    /**
+	/**
 	 * refreshes the bullet delaytime
-     * and speed
-     */
-    public static void refreshBullet()
-    {
-        if (bulletDelayIterator == 0) {bulletDelayIterator = bulletDelayInterval;}
+	 * and speed
+	 */
+	public static void refreshBullet()
+	{
+		if (bulletDelayIterator == 0) {bulletDelayIterator = bulletDelayInterval;}
 		else {bulletDelayIterator--;}
-    }
+	}
 }
