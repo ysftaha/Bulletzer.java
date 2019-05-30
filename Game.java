@@ -224,7 +224,7 @@ final class GamePanel extends JPanel implements KeyListener
 						gameState = State.ABOUT;
 						break;
 					default:
-						System.out.println("Game state Error. Game 221");
+						System.out.println("Game state Error. See Game::keyPressed(KeyEvent)");
 				}
 			}
 		}
@@ -279,7 +279,7 @@ final class GamePanel extends JPanel implements KeyListener
 				pause();
 				break;
 			default:
-				System.out.println("Game state Error. Game 258");
+				System.out.println("Game state Error. See Game::update()");
 				break;
 		}
 	}
@@ -479,7 +479,7 @@ final class GamePanel extends JPanel implements KeyListener
 					}
 					break;
 				default:
-					System.out.println("Enemy type Error. Game 456");
+					System.out.println("Enemy type error. See Game::inGame()");
 			}
 		}
 		// Checking For collisions
@@ -514,9 +514,7 @@ final class GamePanel extends JPanel implements KeyListener
 
 		// ENEMY BULLETS
 		// Spawning them
-		for (Enemy enm : enemies)
-		{for (Bullet bull : enm.spawnBullets())
-			{enemyBullets.add(bull);}}
+		for (Enemy enm : enemies){for (Bullet bull : enm.spawnBullets()){enemyBullets.add(bull);}}
 		// Moving them
 		for (Bullet bull: enemyBullets)
 		{
@@ -552,7 +550,7 @@ final class GamePanel extends JPanel implements KeyListener
 					break;
 				default:
 					System.out.println(
-							"Bullet movement function error 524 Game");
+							"Bullet movement function error. See Game::inGame()");
 			}
 
 		}
@@ -562,8 +560,7 @@ final class GamePanel extends JPanel implements KeyListener
 		{
 			enmB = enemyBullets.get(i);
 			if (enmB.getX() > 800 || enmB.getX()< 0
-					|| enmB.getY()< 0 || enmB.getY() > 800)
-			{enemyBullets.remove(enmB);}
+					|| enmB.getY()< 0 || enmB.getY() > 800){enemyBullets.remove(enmB);}
 		}
 
 
@@ -616,7 +613,7 @@ final class GamePanel extends JPanel implements KeyListener
 						// timer countdown to start
 						break;
 					default:
-						System.out.println("Token type Error. 587 Game");
+						System.out.println("Token type Error. See Game::paintInGame");
 						break;
 				}
 
@@ -630,31 +627,25 @@ final class GamePanel extends JPanel implements KeyListener
 		for (Enemy enm: enemies) {enm.draw(g);}
 
 		// healthbars
-		for (int i = 0; i<Player.getHealth(); i++)
-		{g.drawImage(HEALTHBAR, 10+(14*i), 735, this);}
+		for (int i = 0; i<Player.getHealth(); i++){g.drawImage(HEALTHBAR, 10+(14*i), 735, this);}
 
 		// dark Energy bars
-		for (int i = 0; i<Player.getdarkEnergy()/5; i++)
-		{g.drawImage(DARKENERGY, 580 - (14*i), 735, this);}
+		for (int i = 0; i<Player.getdarkEnergy()/5; i++){g.drawImage(DARKENERGY, 580 - (14*i), 735, this);}
 
 		// empowered sprite around Player sprite (Sheild active)
-		if (Player.isSheilded())
-		{g.drawImage(SHIELDEM, Player.getX()-12, Player.getY()-7, this);}
+		if (Player.isSheilded()){g.drawImage(SHIELDEM, Player.getX()-12, Player.getY()-7, this);}
 
 		// empowered sprite above Player sprite (Frenzy active)
-		if (Player.getBulletDelayInterval() == 6)
-		{g.drawImage(FRENZYEM, Player.getX()+6, Player.getY()-22, this);}
+		if (Player.getBulletDelayInterval() == 6){g.drawImage(FRENZYEM, Player.getX()+6, Player.getY()-22, this);}
 
 		// The player object
 		Player.draw(g);
 
 		// The player's bullets
-		for (int i = playerBullets.size()-1; i>-1; i--)
-		{(playerBullets.get(i)).draw(g);}
+		for (int i = playerBullets.size()-1; i>-1; i--){(playerBullets.get(i)).draw(g);}
 
 		// enemy bullets
-		for (int i = enemyBullets.size()-1; i>-1; i--)
-		{(enemyBullets.get(i)).draw(g);}
+		for (int i = enemyBullets.size()-1; i>-1; i--){(enemyBullets.get(i)).draw(g);}
 	}
 
 	/**
@@ -703,7 +694,7 @@ final class GamePanel extends JPanel implements KeyListener
 				paintPause(g);
 				break;
 			default:
-				System.out.println("Paint Function Error. 666 Game");
+				System.out.println("Paint Function Error. See Game::paintComponent()");
 				break;
 		}
 	}
