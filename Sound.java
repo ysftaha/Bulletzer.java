@@ -1,6 +1,6 @@
 /**
  * Sound.java
- * @author Youssof A. Taha
+ * @author Yusuf Taha
  * handels .wav sound files
  */
 

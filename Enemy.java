@@ -1,6 +1,6 @@
 /**
  * Enemy.java
- * @author Youssof A. Taha
+ * @author Yusuf Taha
  * @see Game.java
  * The enemy object
  * class 👾

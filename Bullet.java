@@ -1,6 +1,6 @@
 /**
  * Bullet.java
- * @author Youssof A. Taha
+ * @author Yusuf Taha
  * @see PlayerBullet.java
  * @see EnemyBullet.java
  * parent class for bullets

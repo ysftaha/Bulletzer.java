@@ -1,6 +1,6 @@
 /**
  * Token.java
- * @author Youssof A. Taha
+ * @author Yusuf Taha
  * Token's class
  */
 

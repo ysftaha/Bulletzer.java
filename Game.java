@@ -1,6 +1,6 @@
 /**
  * Game.java
- * @author Youssof A. Taha
+ * @author Yusuf Taha
  * Where the magic happens
  */
 
